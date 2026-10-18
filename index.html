@@ -6,6 +6,10 @@
 <meta name="description" content="Clasificación de aprobados de Murcia y Alicante del Cuerpo Administrativo de la Seguridad Social, con desempates.">
 <meta name="robots" content="noindex">
 <title>Aprobados Murcia y Alicante</title>
+<meta property="og:title" content="Aprobados Murcia y Alicante">
+<meta property="og:description" content="Clasificación de aprobados del Administrativo de la Seguridad Social. Apúntate y mira tu posición.">
+<meta property="og:url" content="https://aprobados-murcia.github.io/">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap">
@@ -106,6 +110,20 @@ mark { background: none; color: inherit; text-decoration: underline; text-decora
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .6rem; margin: 1.6rem 0 0; }
 .stat { background: rgba(255, 255, 255, .08); border-radius: 14px; padding: .8rem .9rem; min-width: 0; }
 .stat dt { font-size: .6875rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--hero-muted); }
+.stat small { display: block; margin-top: .3rem; font-size: .6875rem; color: var(--hero-muted); }
+.wa { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem; min-height: 2.75rem; padding: 0 1.1rem; border-radius: 12px; background: #25D366; color: #06240F; font-weight: 700; text-decoration: none; }
+.wa svg { width: 1.2rem; height: 1.2rem; }
+.wa:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.yo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem 1.2rem; margin-bottom: 1.2rem; background: var(--card); border: 2px solid var(--lime); border-radius: 18px; padding: 1rem 1.2rem; box-shadow: var(--shadow); }
+.yo[hidden] { display: none; }
+.yo-t { min-width: 0; display: grid; gap: .15rem; }
+.yo-l { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.yo-t b { font: 800 1.6rem/1.1 var(--f-display); }
+.yo-t span:last-child { font-size: .875rem; color: var(--muted); overflow-wrap: anywhere; }
+.yo-a { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; }
+.fila.es-yo, .card.es-yo { box-shadow: inset 4px 0 0 var(--lime); background: rgba(149, 193, 31, .12); }
+.badge.tu { background: var(--lime); color: var(--on-lime); border-color: var(--lime); }
+.fila.flash { animation: flash 2.4s ease-out; }
 .stat dd { margin: .3rem 0 0; font: 800 clamp(1.4rem, 5vw, 1.9rem)/1 var(--f-display); color: var(--lime); font-variant-numeric: tabular-nums; }
 
 /* Clasificación */
@@ -265,14 +283,19 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     </div>
     <dl class="stats">
       <div class="stat"><dt>En el listado</dt><dd id="s-n">0</dd></div>
-      <div class="stat"><dt>Nota más alta</dt><dd id="s-max">–</dd></div>
-      <div class="stat"><dt>Plazas Murcia</dt><dd id="s-plz">35</dd></div>
-<div class="stat"><dt>Nota de corte Murcia</dt><dd id="s-avg">–</dd></div>
+      <div class="stat"><dt>Plazas por provincia</dt><dd id="s-plz">35</dd></div>
+      <div class="stat"><dt>Corte Murcia</dt><dd id="s-cm">–</dd><small id="s-cm2"></small></div>
+      <div class="stat"><dt>Corte Alicante</dt><dd id="s-ca">–</dd><small id="s-ca2"></small></div>
     </dl>
+    <a class="wa" href="https://wa.me/?text=Clasificaci%C3%B3n%20de%20aprobados%20del%20Administrativo%20de%20la%20Seguridad%20Social%20en%20Murcia%20y%20Alicante.%20Ap%C3%BAntate%20y%20mira%20tu%20posici%C3%B3n%3A%20https%3A//aprobados-murcia.github.io/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>Compartir por WhatsApp</a>
   </div>
 </section>
 
 <main class="main wrap">
+  <section id="yo" class="yo" hidden aria-live="polite">
+    <div class="yo-t"><span class="yo-l">Tu posición</span><b id="yo-p"></b><span id="yo-s"></span></div>
+    <div class="yo-a"><button id="yo-ver" class="go" type="button">Verme en la lista</button><button id="yo-no" class="cx" type="button">No soy yo</button></div>
+  </section>
   <section class="guia" aria-labelledby="guia-t">
     <h2 id="guia-t">Cómo apuntarte o cambiar tus datos</h2>
     <ol>
@@ -297,7 +320,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
       <li><b>Fallos de la 2ª parte</b>: menos fallos, primero.</li>
       <li><b>Orden alfabético</b> contando desde la U: U, V, W, X, Y, Z, A, B… hasta la T.</li>
     </ol>
-    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona está en una sola lista, Murcia o Alicante, y puede cambiarse cuando quiera. En verde, los 35 primeros de cada provincia: es una estimación orientativa de plazas, no una cifra oficial. La nota de corte es la del puesto 35 de Murcia entre los inscritos. Al filtrar por provincia, el número de cada fila es su puesto en esa provincia.</p>
+    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona está en una sola lista, Murcia o Alicante, y puede cambiarse cuando quiera. En verde, los 35 primeros de cada provincia: es una estimación orientativa de plazas, no una cifra oficial. La nota de corte de cada provincia es la del puesto 35 entre los inscritos; mientras haya menos de 35, se muestra la del último apuntado como provisional. Al filtrar por provincia, el número de cada fila es su puesto en esa provincia.</p>
   </details>
   <div class="tools">
     <div class="fwrap find">
@@ -311,8 +334,8 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
   </div>
   <div class="pfil" role="group" aria-label="Filtrar por provincia">
     <span class="pfil-l">Provincia:</span>
-    <button type="button" class="chip" data-v="" aria-pressed="true">Todas</button>
-    <button type="button" class="chip" data-v="MUR" aria-pressed="false">Murcia</button>
+    <button type="button" class="chip" data-v="" aria-pressed="false">Todas</button>
+    <button type="button" class="chip" data-v="MUR" aria-pressed="true">Murcia</button>
     <button type="button" class="chip" data-v="ALI" aria-pressed="false">Alicante</button>
   </div>
   <div class="pfil" role="group" aria-label="Filtrar por destino preferido">
@@ -387,8 +410,22 @@ var PROVS = { MUR: 'Murcia', ALI: 'Alicante' };
 var PLAZAS_P = { MUR: 35, ALI: 35 };
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c', prefFiltro = '', provFiltro = '';
+  var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c', prefFiltro = '', provFiltro = 'MUR', provTocado = false, yo = null;
   try { vista = localStorage.getItem('vista') === 'd' ? 'd' : 'c'; } catch (e) {}
+  try { var y0 = parseInt(localStorage.getItem('yo'), 10); if (y0 >= 0) yo = y0; } catch (e) {}
+  function setYo(k) { yo = k; try { if (k == null) localStorage.removeItem('yo'); else localStorage.setItem('yo', String(k)); } catch (e) {} }
+  function setProv(p) {
+    provFiltro = p;
+    document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.v === p)); });
+  }
+  function pintaYo(rows) {
+    var box = $('yo');
+    if (yo == null || !members.has(yo)) { box.hidden = true; return; }
+    var r = DATA[yo], p = infoDe(yo).prov, pos = posEn(r, p), np = PLAZAS_P[p];
+    $('yo-p').textContent = pos + 'º en ' + PROVS[p];
+    $('yo-s').textContent = r.disp + ' · nota ' + nf.format(r.T) + ' · ' + (pos <= np ? 'dentro de las ' + np + ' plazas estimadas' : 'a ' + (pos - np) + (pos - np === 1 ? ' puesto' : ' puestos') + ' de las ' + np + ' plazas estimadas');
+    box.hidden = false;
+  }
   var API = 'https://script.google.com/macros/s/AKfycbzDZR4HR3Ofpq0ZCcGlYAsd_eVonfMW-FaiA_vMKK5a9H_Dj_CIZRiTYO7UBnazGE4MZw/exec';
   var GS = true;
   function api(method, body) {
@@ -411,6 +448,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var m = new Map();
     codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: provs[c] === 'ALI' ? 'ALI' : 'MUR', alt: false }); });
     members = m; loaded = true;
+    if (!provTocado && yo != null && m.has(yo)) setProv(m.get(yo).prov);
     $('upd').textContent = 'actualizada a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     render();
   }
@@ -458,8 +496,13 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     list.textContent = '';
     $('s-n').textContent = String(rows.length);
     if (rows.length) {
-            $('s-max').textContent = nf.format(rows[0].T); var mur = rows.filter(function (x) { return infoDe(x.k).prov === 'MUR'; }); $('s-avg').textContent = mur.length >= PLAZAS ? nf.format(mur[PLAZAS - 1].T) : '–';
-    } else { $('s-max').textContent = '–'; $('s-avg').textContent = '–'; }
+    }
+    [['MUR', 's-cm'], ['ALI', 's-ca']].forEach(function (pp) {
+      var l = rows.filter(function (x) { return infoDe(x.k).prov === pp[0]; }), np = PLAZAS_P[pp[0]];
+      $(pp[1]).textContent = l.length ? nf.format(l[Math.min(np, l.length) - 1].T) : '–';
+      $(pp[1] + '2').textContent = !l.length ? '' : (l.length >= np ? 'Puesto ' + np : 'Provisional · ' + l.length + ' de ' + np + ' apuntados');
+    });
+    pintaYo(rows);
     var vac = $('vacio');
     vac.hidden = rows.length > 0;
     if (!rows.length) {
@@ -515,6 +558,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
           li.append(parts);
         }
         li.dataset.k = r.k;
+        if (r.k === yo) { li.classList.add('es-yo'); (compacta ? fn : who).insertBefore(el('span', 'badge tu', 'Tú'), (compacta ? fn : who).children[1] || null); }
         if (filtro.length) li.classList.add('hit');
         list.append(li);
       }
@@ -531,9 +575,9 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       var idx = rows.findIndex(function (r) { return r.k === justAdded; });
       if (idx >= 0) {
         var card = list.querySelector('[data-k="' + rows[idx].k + '"]');
-        if (!card) { filtro = []; $('fpos').value = ''; prefFiltro = ''; provFiltro = ''; document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.f === '')); }); document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.v === '')); }); justAdded = rows[idx].k; render(); return; }
+        if (!card) { filtro = []; $('fpos').value = ''; prefFiltro = ''; document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.f === '')); }); setProv(infoDe(rows[idx].k).prov); justAdded = rows[idx].k; render(); return; }
         card.classList.add('flash');
-        toast('Añadido: ' + rows[idx].disp + ' · puesto ' + (idx + 1) + ' de ' + rows.length);
+        toast('Añadido: ' + rows[idx].disp + ' · ' + posEn(rows[idx], infoDe(rows[idx].k).prov) + 'º en ' + PROVS[infoDe(rows[idx].k).prov]);
         var b = card.getBoundingClientRect();
         if (b.top < 0 || b.bottom > window.innerHeight) card.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
       }
@@ -557,7 +601,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
         var dv = dniVal(); if (!dv) return;
         save.disabled = true; save.textContent = 'Guardando…';
         api('POST', { accion: 'pref', k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false })
-          .then(function (st) { $('conf').hidden = true; setMembers(st); toast('Preferencias guardadas · ' + PROVS[selProv]); })
+          .then(function (st) { $('conf').hidden = true; setYo(r.k); setProv(selProv); setMembers(st); toast('Preferencias guardadas · ' + PROVS[selProv]); })
           .catch(function (e) { save.disabled = false; save.textContent = 'Guardar preferencias'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo guardar. Inténtalo de nuevo.', 'err'); });
       };
     } else {
@@ -568,7 +612,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
         var dv = dniVal(); if (!dv) return;
         go.disabled = true; go.textContent = 'Añadiendo…';
         api('POST', { k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false })
-          .then(function (codes) { $('conf').hidden = true; justAdded = r.k; setMembers(codes); })
+          .then(function (codes) { $('conf').hidden = true; justAdded = r.k; setYo(r.k); setProv(selProv); setMembers(codes); })
           .catch(function (e) { go.disabled = false; go.textContent = 'Añadirme a la clasificación'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo añadir. Inténtalo de nuevo.', 'err'); });
       };
     }
@@ -692,8 +736,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   });
   document.querySelectorAll('.chip[data-v]').forEach(function (b) {
     b.addEventListener('click', function () {
-      provFiltro = b.dataset.v;
-      document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      provTocado = true; setProv(b.dataset.v);
       render();
     });
   });
@@ -704,6 +747,15 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     render();
   });
   $('v-c').setAttribute('aria-pressed', String(vista === 'c')); $('v-d').setAttribute('aria-pressed', String(vista === 'd'));
+  $('yo-ver').addEventListener('click', function () {
+    if (yo == null) return;
+    filtro = []; $('fpos').value = ''; prefFiltro = '';
+    document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.f === '')); });
+    setProv(infoDe(yo).prov); render();
+    var row = $('lista').querySelector('[data-k="' + yo + '"]');
+    if (row) { row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); row.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }); }
+  });
+  $('yo-no').addEventListener('click', function () { setYo(null); render(); toast('Listo. Busca tu nombre arriba si quieres que la página te recuerde.'); });
   q.disabled = false;
   render(); load();
   setInterval(function () { if (!document.hidden) load(); }, 60000);
