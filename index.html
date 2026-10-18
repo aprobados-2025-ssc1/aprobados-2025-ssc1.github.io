@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Clasificación de aprobados de Murcia, Alicante, Valencia y Madrid del Cuerpo Administrativo de la Seguridad Social, con desempates.">
+<meta name="description" content="Clasificación de aprobados del Cuerpo Administrativo de la Seguridad Social por provincias, con desempates.">
 <meta name="robots" content="noindex">
 <title>Aprobados SSC1 2025</title>
 <meta property="og:title" content="Aprobados SSC1 2025">
@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: tarjeta de cabecera con buscador y tres cifras; debajo, la clasificación como lista de tarjetas con medidores por parte. */
 :root {
@@ -172,6 +172,27 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .pfil-l { font-size: .8125rem; font-weight: 700; color: var(--muted); margin-right: .2rem; }
 .alt { margin: 0; padding: .55rem .7rem; border-radius: 10px; background: var(--soft); font-size: .8125rem; line-height: 1.4; color: var(--ink); }
 .badge.prov { background: transparent; }
+.badge.zona { background: transparent; border-style: dashed; }
+/* Entrada: texto a máquina de escribir y transición a la página */
+#intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px; background: radial-gradient(120% 120% at 50% 0%, #16306a 0%, #0B1F44 55%, #061229 100%); color: #EDF1FA; transition: clip-path .9s cubic-bezier(.7, 0, .2, 1), opacity .9s ease; clip-path: circle(150% at 50% 50%); }
+#intro.fuera { clip-path: circle(0% at 50% 42%); opacity: .4; pointer-events: none; }
+#intro .tw { max-width: 34rem; font: 800 clamp(1.7rem, 7vw, 3rem)/1.15 var(--f-display); text-align: center; text-wrap: balance; }
+#intro .tw .l2 { display: block; margin-top: .35em; font-size: .62em; font-weight: 700; color: #95C11F; }
+#intro .tw .l3 { display: block; margin-top: .3em; font-size: .62em; font-weight: 600; color: #C9D3EA; }
+#intro .caret { display: inline-block; width: .08em; height: 1em; margin-left: .06em; vertical-align: -.12em; background: #95C11F; animation: parpadeo 1s steps(1) infinite; }
+@keyframes parpadeo { 50% { opacity: 0; } }
+#intro .saltar { position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); border: 1px solid rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .06); color: #EDF1FA; border-radius: 99px; padding: .55rem 1rem; font: 700 .875rem var(--f-body, inherit); cursor: pointer; }
+#intro .sonido { position: absolute; left: 16px; bottom: max(16px, env(safe-area-inset-bottom)); border: 0; background: none; color: #9DABCB; font-size: .8125rem; cursor: pointer; }
+#intro .saltar:focus-visible, #intro .sonido:focus-visible { outline: 3px solid #95C11F; outline-offset: 2px; }
+body.intro-on { overflow: hidden; }
+.hero-wrap.entra { animation: entra .8s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes entra { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { #intro { transition: opacity .3s; } #intro.fuera { clip-path: none; opacity: 0; } .hero-wrap.entra { animation: none; } }
+
+.pz { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px; padding: .45rem .8rem; font-size: .8125rem; font-weight: 700; cursor: pointer; }
+.pz[aria-pressed="true"] { background: var(--ink); color: var(--card); border-color: var(--ink); }
+.pz:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.pfil[hidden], #zona-w[hidden] { display: none; }
 .dniw { display: grid; gap: .35rem; }
 .dnif { height: 2.9rem; padding: 0 .9rem; border: 1px solid var(--line); font-size: 1rem; letter-spacing: .04em; }
 .dnif:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
@@ -234,6 +255,71 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 
 </head>
 <body>
+<div id="intro" role="dialog" aria-label="Bienvenida" hidden>
+  <p class="tw" aria-live="polite"><span class="l1"></span><span class="l2"></span><span class="l3"></span><span class="caret" aria-hidden="true"></span></p>
+  <button type="button" class="sonido" id="i-son">Toca para activar el sonido</button>
+  <button type="button" class="saltar" id="i-skip">Entrar ›</button>
+</div>
+<script>
+(function () {
+  var ov = document.getElementById('intro');
+  var ya = false; try { ya = sessionStorage.getItem('intro') === '1'; } catch (e) {}
+  if (ya) { ov.remove(); return; }
+  try { sessionStorage.setItem('intro', '1'); } catch (e) {}
+  ov.hidden = false; document.body.classList.add('intro-on');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var AC = window.AudioContext || window.webkitAudioContext, ac = null, buf = null;
+  try { ac = AC ? new AC() : null; } catch (e) { ac = null; }
+  if (ac) {
+    buf = ac.createBuffer(1, Math.floor(ac.sampleRate * 0.03), ac.sampleRate);
+    var ch = buf.getChannelData(0);
+    for (var i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 3);
+  }
+  var son = document.getElementById('i-son');
+  function sonidoOk() { return ac && ac.state === 'running'; }
+  function pintaSon() { son.hidden = !ac || sonidoOk(); }
+  function activar() { if (ac && ac.state !== 'running') ac.resume().then(pintaSon, pintaSon); }
+  ov.addEventListener('pointerdown', activar); son.addEventListener('click', activar);
+  if (ac) ac.resume().then(pintaSon, pintaSon); pintaSon();
+  function tecla(fuerte) {
+    if (!sonidoOk()) return;
+    var s = ac.createBufferSource(); s.buffer = buf; s.playbackRate.value = 0.8 + Math.random() * 0.5;
+    var f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = fuerte ? 1800 : 2600 + Math.random() * 1400; f.Q.value = 1.2;
+    var g = ac.createGain(); g.gain.value = fuerte ? 0.9 : 0.55;
+    s.connect(f); f.connect(g); g.connect(ac.destination); s.start();
+  }
+  function campana() {
+    if (!sonidoOk()) return;
+    var o = ac.createOscillator(), g = ac.createGain(), t0 = ac.currentTime;
+    o.type = 'sine'; o.frequency.value = 2093;
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.25, t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.1);
+    o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0 + 1.2);
+  }
+  var lineas = [['l1', '¡Felicidades!'], ['l2', 'Ya tienes tu plaza.'], ['l3', 'Ahora te toca elegir destino.']];
+  var fin = false, timer = null;
+  function cerrar() {
+    if (fin) return; fin = true; clearTimeout(timer);
+    ov.classList.add('fuera'); document.body.classList.remove('intro-on');
+    var h = document.querySelector('.hero-wrap'); if (h) h.classList.add('entra');
+    setTimeout(function () { ov.remove(); }, 950);
+  }
+  document.getElementById('i-skip').addEventListener('click', cerrar);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrar(); });
+  if (reduce) { lineas.forEach(function (l) { ov.querySelector('.' + l[0]).textContent = l[1]; }); timer = setTimeout(cerrar, 1800); return; }
+  var li = 0, ci = 0;
+  function paso() {
+    if (fin) return;
+    if (li >= lineas.length) { campana(); timer = setTimeout(cerrar, 900); return; }
+    var l = lineas[li], el = ov.querySelector('.' + l[0]);
+    if (ci < l[1].length) {
+      var c = l[1][ci++]; el.textContent += c;
+      if (c !== ' ') tecla(false);
+      timer = setTimeout(paso, c === ' ' ? 70 : 30 + Math.random() * 30);
+    } else { li++; ci = 0; tecla(true); timer = setTimeout(paso, 300); }
+  }
+  timer = setTimeout(paso, 350);
+})();
+</script>
 <header class="top wrap">
   <span class="brand"><i></i>Cuerpo Administrativo · Seguridad Social</span>
   <span class="pill">Convocatoria de 22/12/2025</span>
@@ -241,7 +327,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 
 <section class="hero-wrap wrap">
   <div class="hero">
-    <p class="eyebrow">Murcia · Alicante · Valencia · Madrid · Turno general y reserva</p>
+    <p class="eyebrow">Murcia · Alicante · Valencia · Madrid · Andalucía · Albacete · Zaragoza</p>
     <h1>Aprobados SSC1 2025</h1>
     <p class="lead">Escribe tus apellidos y elige tu nombre. Indica tu provincia, escribe los 4 números de tu DNI del listado oficial y pulsa «Añadirme». ¿Ya estás inscrito? Haz lo mismo para cambiar de provincia o de destino.</p>
     <div class="combo">
@@ -261,6 +347,12 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
             <button type="button" class="pv" data-v="ALI" aria-pressed="false">Alicante</button>
             <button type="button" class="pv" data-v="VAL" aria-pressed="false">Valencia</button>
             <button type="button" class="pv" data-v="MAD" aria-pressed="false">Madrid</button>
+            <button type="button" class="pv" data-v="ALM" aria-pressed="false">Almería</button>
+            <button type="button" class="pv" data-v="SEV" aria-pressed="false">Sevilla</button>
+            <button type="button" class="pv" data-v="COR" aria-pressed="false">Córdoba</button>
+            <button type="button" class="pv" data-v="MAL" aria-pressed="false">Málaga</button>
+            <button type="button" class="pv" data-v="ALB" aria-pressed="false">Albacete</button>
+            <button type="button" class="pv" data-v="ZAR" aria-pressed="false">Zaragoza</button>
           </div>
           <p class="alt" id="alt-w" hidden><span id="alt-s"></span></p>
         </div>
@@ -271,6 +363,20 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
             <button type="button" class="po" data-p="INSS" aria-pressed="false">INSS</button>
             <button type="button" class="po" data-p="TGSS" aria-pressed="false">Tesorería (TGSS)</button>
             <button type="button" class="po" data-p="ISM" aria-pressed="false">ISM</button>
+          </div>
+        </div>
+        <div class="prefs" id="zona-w" hidden>
+          <span class="pref-l" id="zona-l">Zona de Madrid <small>(opcional, hasta 3)</small></span>
+          <div class="pref-opts" role="group" aria-labelledby="zona-l">
+            <button type="button" class="pz" data-z="C" aria-pressed="false">Centro</button>
+            <button type="button" class="pz" data-z="N" aria-pressed="false">Norte</button>
+            <button type="button" class="pz" data-z="NE" aria-pressed="false">Noreste</button>
+            <button type="button" class="pz" data-z="E" aria-pressed="false">Este</button>
+            <button type="button" class="pz" data-z="SE" aria-pressed="false">Sureste</button>
+            <button type="button" class="pz" data-z="S" aria-pressed="false">Sur</button>
+            <button type="button" class="pz" data-z="SO" aria-pressed="false">Suroeste</button>
+            <button type="button" class="pz" data-z="O" aria-pressed="false">Oeste</button>
+            <button type="button" class="pz" data-z="NO" aria-pressed="false">Noroeste</button>
           </div>
         </div>
         <div class="dniw">
@@ -285,11 +391,8 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     </div>
     <dl class="stats">
       <div class="stat"><dt>En el listado</dt><dd id="s-n">0</dd></div>
-      <div class="stat"><dt>Plazas estimadas</dt><dd id="s-plz">35</dd><small>por provincia · Madrid: 255</small></div>
-      <div class="stat"><dt>Corte Murcia</dt><dd id="s-cm">–</dd><small id="s-cm2"></small></div>
-      <div class="stat"><dt>Corte Alicante</dt><dd id="s-ca">–</dd><small id="s-ca2"></small></div>
-      <div class="stat"><dt>Corte Valencia</dt><dd id="s-cv">–</dd><small id="s-cv2"></small></div>
-      <div class="stat"><dt>Corte Madrid</dt><dd id="s-cd">–</dd><small id="s-cd2"></small></div>
+      <div class="stat"><dt id="s-plz-t">Plazas Murcia</dt><dd id="s-plz">35</dd><small>estimación orientativa</small></div>
+      <div class="stat"><dt id="s-c-t">Corte Murcia</dt><dd id="s-c">–</dd><small id="s-c2"></small></div>
     </dl>
   </div>
 </section>
@@ -303,10 +406,10 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     <h2 id="guia-t">Cómo apuntarte o cambiar tus datos</h2>
     <ol>
       <li><span><b>Busca tu nombre</b> en el buscador de arriba: escribe tu apellido y pulsa sobre tu nombre.</span></li>
-      <li><span><b>Elige tu provincia</b> (Murcia, Alicante, Valencia o Madrid) y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM.</span></li>
+      <li><span><b>Elige tu provincia</b> y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM. Si eliges Madrid, también puedes marcar tus zonas (Sur, Norte, Centro…).</span></li>
       <li><span><b>Escribe los 4 números de tu DNI</b> tal como aparecen en el listado oficial (si pone ***1234**, escribe 1234) y pulsa «Añadirme». Si ya estabas apuntado, pulsa «Guardar preferencias».</span></li>
     </ol>
-    <p>Puedes repetirlo cuando quieras para cambiar de provincia o de destino. Cada persona está en una sola lista: Murcia, Alicante, Valencia o Madrid.</p>
+    <p>Puedes repetirlo cuando quieras para cambiar de provincia o de destino. Cada persona está en una sola lista.</p>
   </section>
   <div class="sec-head">
     <h2>Clasificación</h2>
@@ -323,7 +426,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
       <li><b>Fallos de la 2ª parte</b>: menos fallos, primero.</li>
       <li><b>Orden alfabético</b> contando desde la U: U, V, W, X, Y, Z, A, B… hasta la T.</li>
     </ol>
-    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona está en una sola lista (Murcia, Alicante, Valencia o Madrid) y puede cambiarse cuando quiera. En verde, los 35 primeros de cada provincia (en Madrid, los 255 primeros): es una estimación orientativa de plazas, no una cifra oficial. La nota de corte de cada provincia es la del último puesto con plaza estimada (el 35, o el 255 en Madrid) entre los inscritos; mientras no haya tantos, se muestra la del último apuntado como provisional. Al filtrar por provincia, el número de cada fila es su puesto en esa provincia.</p>
+    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona está en una sola lista y puede cambiarse cuando quiera. En verde, los que entran dentro de las plazas estimadas de su provincia (Murcia, Alicante, Valencia y Zaragoza 35; Madrid 255; Sevilla 42; Almería y Málaga 20; Córdoba 15; Albacete 14): es una estimación orientativa de plazas, no una cifra oficial. La nota de corte de cada provincia es la del último puesto con plaza estimada entre los inscritos; mientras no haya tantos, se muestra la del último apuntado como provisional. Al filtrar por provincia, el número de cada fila es su puesto en esa provincia.</p>
   </details>
   <div class="tools">
     <div class="fwrap find">
@@ -342,6 +445,12 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     <button type="button" class="chip" data-v="ALI" aria-pressed="false">Alicante</button>
     <button type="button" class="chip" data-v="VAL" aria-pressed="false">Valencia</button>
     <button type="button" class="chip" data-v="MAD" aria-pressed="false">Madrid</button>
+    <button type="button" class="chip" data-v="ALM" aria-pressed="false">Almería</button>
+    <button type="button" class="chip" data-v="SEV" aria-pressed="false">Sevilla</button>
+    <button type="button" class="chip" data-v="COR" aria-pressed="false">Córdoba</button>
+    <button type="button" class="chip" data-v="MAL" aria-pressed="false">Málaga</button>
+    <button type="button" class="chip" data-v="ALB" aria-pressed="false">Albacete</button>
+    <button type="button" class="chip" data-v="ZAR" aria-pressed="false">Zaragoza</button>
   </div>
   <div class="pfil" role="group" aria-label="Filtrar por destino preferido">
     <span class="pfil-l">Destino:</span>
@@ -351,6 +460,19 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     <button type="button" class="chip" data-f="TGSS" aria-pressed="false">Tesorería (TGSS)</button>
     <button type="button" class="chip" data-f="ISM" aria-pressed="false">ISM</button>
     <button type="button" class="chip" data-f="none" aria-pressed="false">Sin indicar</button>
+  </div>
+  <div class="pfil" id="zfil" role="group" aria-label="Filtrar por zona de Madrid" hidden>
+    <span class="pfil-l">Zona:</span>
+    <button type="button" class="chip" data-z="" aria-pressed="true">Todas</button>
+    <button type="button" class="chip" data-z="C" aria-pressed="false">Centro</button>
+    <button type="button" class="chip" data-z="N" aria-pressed="false">Norte</button>
+    <button type="button" class="chip" data-z="NE" aria-pressed="false">Noreste</button>
+    <button type="button" class="chip" data-z="E" aria-pressed="false">Este</button>
+    <button type="button" class="chip" data-z="SE" aria-pressed="false">Sureste</button>
+    <button type="button" class="chip" data-z="S" aria-pressed="false">Sur</button>
+    <button type="button" class="chip" data-z="SO" aria-pressed="false">Suroeste</button>
+    <button type="button" class="chip" data-z="O" aria-pressed="false">Oeste</button>
+    <button type="button" class="chip" data-z="NO" aria-pressed="false">Noroeste</button>
   </div>
   <p id="fcount" class="sec-sub fcount" hidden></p>
   <ol id="lista" class="rank"></ol>
@@ -412,15 +534,20 @@ function compare(a, b) {
   var nf = new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var PLAZAS = 35;
 var PREFS = { CAISS: 'CAISS', INSS: 'INSS', TGSS: 'Tesorería (TGSS)', ISM: 'ISM' };
-var PROVS = { MUR: 'Murcia', ALI: 'Alicante', VAL: 'Valencia', MAD: 'Madrid' };
-var PLAZAS_P = { MUR: 35, ALI: 35, VAL: 35, MAD: 255 };
+var PROVS = {"MUR": "Murcia", "ALI": "Alicante", "VAL": "Valencia", "MAD": "Madrid", "ALM": "Almería", "SEV": "Sevilla", "COR": "Córdoba", "MAL": "Málaga", "ALB": "Albacete", "ZAR": "Zaragoza"};
+var PLAZAS_P = {"MUR": 35, "ALI": 35, "VAL": 35, "MAD": 255, "ALM": 20, "SEV": 42, "COR": 15, "MAL": 20, "ALB": 14, "ZAR": 35};
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c', prefFiltro = '', provFiltro = 'MUR', provTocado = false, yo = null;
   try { vista = localStorage.getItem('vista') === 'd' ? 'd' : 'c'; } catch (e) {}
   try { var y0 = parseInt(localStorage.getItem('yo'), 10); if (y0 >= 0) yo = y0; } catch (e) {}
   function setYo(k) { yo = k; try { if (k == null) localStorage.removeItem('yo'); else localStorage.setItem('yo', String(k)); } catch (e) {} }
+  var ZONAS = {"C": "Centro", "N": "Norte", "NE": "Noreste", "E": "Este", "SE": "Sureste", "S": "Sur", "SO": "Suroeste", "O": "Oeste", "NO": "Noroeste"}, zonaFiltro = '', selZona = [];
+  function zonaTxt(z) { return String(z || '').split(',').filter(function (x) { return ZONAS[x]; }).map(function (x) { return ZONAS[x]; }).join(' · '); }
+  function setZona(z) { zonaFiltro = z; document.querySelectorAll('.chip[data-z]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.z === z)); }); }
   function setProv(p) {
+    if (p !== 'MAD') setZona('');
+    var zf = document.getElementById('zfil'); if (zf) zf.hidden = p !== 'MAD';
     provFiltro = p;
     document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.v === p)); });
   }
@@ -442,7 +569,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       return j;
     });
   }
-  function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false }; }
+  function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false, zona: '' }; }
   function enProv(mm, p) { return mm.prov === p; }
   function posEn(r, p, mmSup) {
     var n = 1;
@@ -452,12 +579,14 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function setMembers(resp) {
     var codes = Array.isArray(resp) ? resp : ((resp && resp.codigos) || []), prefs = (resp && resp.prefs) || {}, provs = (resp && resp.provs) || {}, alts = (resp && resp.alts) || {};
     var m = new Map();
-    codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false }); });
+    codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false, zona: ((resp && resp.zonas) || {})[c] || '' }); });
     members = m; loaded = true;
+    try { if (!resp.__cache) localStorage.setItem('estado', JSON.stringify({ t: Date.now(), r: resp })); } catch (e) {}
     if (!provTocado && yo != null && m.has(yo)) setProv(m.get(yo).prov);
     $('upd').textContent = 'actualizada a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     render();
   }
+  try { var c0 = JSON.parse(localStorage.getItem('estado') || 'null'); if (c0 && c0.r && Date.now() - c0.t < 6 * 3600 * 1000) { c0.r.__cache = 1; setTimeout(function () { if (!loaded) setMembers(c0.r); }, 0); } } catch (e) {}
   function load() {
     api('GET').then(setMembers).catch(function () { $('upd').textContent = 'no se pudo actualizar'; });
   }
@@ -503,11 +632,14 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     $('s-n').textContent = String(rows.length);
     if (rows.length) {
     }
-    [['MUR', 's-cm'], ['ALI', 's-ca'], ['VAL', 's-cv'], ['MAD', 's-cd']].forEach(function (pp) {
-      var l = rows.filter(function (x) { return infoDe(x.k).prov === pp[0]; }), np = PLAZAS_P[pp[0]];
-      $(pp[1]).textContent = l.length ? nf.format(l[Math.min(np, l.length) - 1].T) : '–';
-      $(pp[1] + '2').textContent = !l.length ? '' : (l.length >= np ? 'Puesto ' + np : 'Provisional · ' + l.length + ' de ' + np + ' apuntados');
-    });
+    (function () {
+      var p0 = provFiltro || (yo != null && members.has(yo) ? infoDe(yo).prov : 'MUR');
+      var l = rows.filter(function (x) { return infoDe(x.k).prov === p0; }), np = PLAZAS_P[p0];
+      $('s-plz-t').textContent = 'Plazas ' + PROVS[p0]; $('s-plz').textContent = String(np);
+      $('s-c-t').textContent = 'Corte ' + PROVS[p0];
+      $('s-c').textContent = l.length ? nf.format(l[Math.min(np, l.length) - 1].T) : '–';
+      $('s-c2').textContent = !l.length ? 'Nadie apuntado todavía' : (l.length >= np ? 'Puesto ' + np : 'Provisional · ' + l.length + ' de ' + np + ' apuntados');
+    })();
     pintaYo(rows);
     var vac = $('vacio');
     vac.hidden = rows.length > 0;
@@ -517,7 +649,8 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     }
     var compacta = vista === 'c';
     list.className = 'rank' + (compacta ? ' compacta' : '');
-    var shown = 0, grupo = 0, filtrando = filtro.length || prefFiltro || provFiltro, cnt = { MUR: 0, ALI: 0, VAL: 0, MAD: 0 }, tot = { MUR: 0, ALI: 0, VAL: 0, MAD: 0 };
+    var shown = 0, grupo = 0, filtrando = filtro.length || prefFiltro || provFiltro, cnt = {}, tot = {};
+    Object.keys(PROVS).forEach(function (p) { cnt[p] = 0; tot[p] = 0; });
     rows.forEach(function (x) { tot[infoDe(x.k).prov]++; });
     if (compacta && rows.length) {
       var hd = el('li', 'fila head'); hd.setAttribute('aria-hidden', 'true');
@@ -526,13 +659,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     }
     rows.forEach(function (r, i) {
       var mm = infoDe(r.k), pr = mm.pref;
-      if (enProv(mm, 'MUR')) cnt.MUR++;
-      if (enProv(mm, 'ALI')) cnt.ALI++;
-      if (enProv(mm, 'VAL')) cnt.VAL++;
-      if (enProv(mm, 'MAD')) cnt.MAD++;
+      cnt[mm.prov]++;
       var esTop = cnt[mm.prov] <= PLAZAS_P[mm.prov];
       var posV = provFiltro ? cnt[provFiltro] : i + 1;
-      var match = (!provFiltro || enProv(mm, provFiltro)) && (!filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); })) && (!prefFiltro || (prefFiltro === 'none' ? !pr : pr === prefFiltro));
+      var match = (!provFiltro || enProv(mm, provFiltro)) && (!zonaFiltro || provFiltro !== 'MAD' || (mm.zona || '').split(',').indexOf(zonaFiltro) >= 0) && (!filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); })) && (!prefFiltro || (prefFiltro === 'none' ? !pr : pr === prefFiltro));
       if (pr && prefFiltro === pr) grupo++;
       if (match) {
         shown++;
@@ -544,6 +674,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
           if (r.c) fn.append(el('span', 'badge', 'Cupo'));
           if (pr) fn.append(el('span', 'badge pref', pr));
           fn.append(el('span', 'badge prov', PROVS[mm.prov]));
+          if (mm.prov === 'MAD' && mm.zona) fn.append(el('span', 'badge zona', zonaTxt(mm.zona)));
           if (prefFiltro && prefFiltro !== 'none') fn.append(el('span', 'fg', grupo + 'º en ' + prefFiltro));
           li.append(fn, el('span', 'fv', nf.format(r.t1)), el('span', 'fv', nf.format(r.t2)), el('span', 'ft', nf.format(r.T)));
         } else {
@@ -553,6 +684,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
           if (r.c) who.append(el('span', 'badge', 'Cupo reserva'));
           if (pr) who.append(el('span', 'badge pref', PREFS[pr]));
           who.append(el('span', 'badge prov', PROVS[mm.prov]));
+          if (mm.prov === 'MAD' && mm.zona) who.append(el('span', 'badge zona', 'Zona: ' + zonaTxt(mm.zona)));
           if (prefFiltro && prefFiltro !== 'none') who.append(el('span', 'tb', grupo + 'º entre quienes prefieren ' + PREFS[prefFiltro]));
           if (i > 0) {
             var c = compare(rows[i - 1], r);
@@ -599,7 +731,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var conf = $('conf'), go = $('c-go');
     $('c-nm').textContent = r.disp;
     $('c-dni').value = '';
-    var mm0 = infoDe(r.k); selPref = mm0.pref; selProv = members.has(r.k) ? mm0.prov : ''; selAlt = mm0.alt; curR = r; paintPrefs();
+    var mm0 = infoDe(r.k); selPref = mm0.pref; selProv = members.has(r.k) ? mm0.prov : ''; selAlt = mm0.alt; selZona = (mm0.prov === 'MAD' && mm0.zona) ? mm0.zona.split(',') : []; curR = r; paintPrefs();
     var save = $('c-save'); save.hidden = true;
     if (members.has(r.k)) {
       var pos = ranked().findIndex(function (x) { return x.k === r.k; }) + 1;
@@ -608,7 +740,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       save.onclick = function () {
         var dv = dniVal(); if (!dv) return;
         save.disabled = true; save.textContent = 'Guardando…';
-        api('POST', { accion: 'pref', k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false })
+        api('POST', { accion: 'pref', k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false, zona: selProv === 'MAD' ? selZona.join(',') : '' })
           .then(function (st) { $('conf').hidden = true; setYo(r.k); setProv(selProv); setMembers(st); toast('Preferencias guardadas · ' + PROVS[selProv]); })
           .catch(function (e) { save.disabled = false; save.textContent = 'Guardar preferencias'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo guardar. Inténtalo de nuevo.', 'err'); });
       };
@@ -616,10 +748,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       $('c-sub').textContent = 'Nota ' + nf.format(r.T) + (r.c ? ' · Cupo reserva' : '') + ' · Para añadirte, elige provincia y escribe los 4 números de tu DNI.';
       go.hidden = false; go.disabled = !GS; go.textContent = 'Añadirme a la clasificación';
       go.onclick = function () {
-        if (!selProv) { toast('Elige Murcia, Alicante, Valencia o Madrid antes de añadirte.', 'err'); return; }
+        if (!selProv) { toast('Elige tu provincia antes de añadirte.', 'err'); return; }
         var dv = dniVal(); if (!dv) return;
         go.disabled = true; go.textContent = 'Añadiendo…';
-        api('POST', { k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false })
+        api('POST', { k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false, zona: selProv === 'MAD' ? selZona.join(',') : '' })
           .then(function (codes) { $('conf').hidden = true; justAdded = r.k; setYo(r.k); setProv(selProv); setMembers(codes); })
           .catch(function (e) { go.disabled = false; go.textContent = 'Añadirme a la clasificación'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo añadir. Inténtalo de nuevo.', 'err'); });
       };
@@ -637,16 +769,30 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     document.querySelectorAll('.po').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.p === selPref)); });
     document.querySelectorAll('.pv').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === selProv)); });
     var w = $('alt-w'), show = false;
-    if (curR && selProv === 'MUR') {
-      var pm = posEn(curR, 'MUR', { prov: 'MUR', alt: false, pref: '' });
-      if (pm > PLAZAS_P.MUR) {
-        var pa = posEn(curR, 'ALI', { prov: 'ALI', alt: false, pref: '' }), pv = posEn(curR, 'VAL', { prov: 'VAL', alt: false, pref: '' }), pd = posEn(curR, 'MAD', { prov: 'MAD', alt: false, pref: '' });
+    if (curR && selProv) {
+      var pm = posEn(curR, selProv, { prov: selProv, alt: false, pref: '' });
+      if (pm > PLAZAS_P[selProv]) {
+        var otras = Object.keys(PROVS).filter(function (p) { return p !== selProv; }).map(function (p) { return [p, posEn(curR, p, { prov: p, alt: false, pref: '' })]; }).filter(function (x) { return x[1] <= PLAZAS_P[x[0]]; });
         show = true;
-        $('alt-s').textContent = 'En Murcia serías el ' + pm + 'º. Si eligieras Alicante, serías el ' + pa + 'º; en Valencia, el ' + pv + 'º, y en Madrid, el ' + pd + 'º. Solo puedes estar en una lista y puedes cambiarte cuando quieras.';
+        $('alt-s').textContent = 'En ' + PROVS[selProv] + ' serías el ' + pm + 'º (plazas estimadas: ' + PLAZAS_P[selProv] + '). ' + (otras.length ? 'Entrarías dentro de las plazas estimadas en: ' + otras.map(function (x) { return PROVS[x[0]] + ' (' + x[1] + 'º)'; }).join(', ') + '. ' : '') + 'Solo puedes estar en una lista y puedes cambiarte cuando quieras.';
       }
     }
     w.hidden = !show;
+    $('zona-w').hidden = selProv !== 'MAD';
+    document.querySelectorAll('.pz').forEach(function (b) { b.setAttribute('aria-pressed', String(selZona.indexOf(b.dataset.z) >= 0)); });
   }
+  document.querySelectorAll('.pz').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var z = b.dataset.z, i = selZona.indexOf(z);
+      if (i >= 0) selZona.splice(i, 1);
+      else if (selZona.length >= 3) { toast('Puedes elegir hasta 3 zonas.', 'err'); return; }
+      else selZona.push(z);
+      paintPrefs();
+    });
+  });
+  document.querySelectorAll('.chip[data-z]').forEach(function (b) {
+    b.addEventListener('click', function () { setZona(b.dataset.z); render(); });
+  });
   document.querySelectorAll('.pv').forEach(function (b) {
     b.addEventListener('click', function () { selProv = b.dataset.v; paintPrefs(); });
   });
@@ -766,7 +912,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   $('yo-no').addEventListener('click', function () { setYo(null); render(); toast('Listo. Busca tu nombre arriba si quieres que la página te recuerde.'); });
   q.disabled = false;
   render(); load();
-  setInterval(function () { if (!document.hidden) load(); }, 60000);
+  setInterval(function () { if (!document.hidden) load(); }, 120000);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
 })();
 </script>
