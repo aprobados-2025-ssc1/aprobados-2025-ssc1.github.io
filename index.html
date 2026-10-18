@@ -110,6 +110,12 @@ mark { background: none; color: inherit; text-decoration: underline; text-decora
 
 /* Clasificación */
 .main { padding-block: 2rem 3rem; }
+.guia { margin-bottom: 2rem; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 1.2rem 1.3rem; box-shadow: var(--shadow); }
+.guia h2 { font-size: 1.25rem; }
+.guia ol { list-style: none; counter-reset: paso; margin: .9rem 0 0; padding: 0; display: grid; gap: .7rem; }
+.guia li { counter-increment: paso; display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: .7rem; align-items: start; line-height: 1.45; }
+.guia li::before { content: counter(paso); display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--lime); color: var(--on-lime); font: 800 .95rem var(--f-display); }
+.guia p { margin: .9rem 0 0; font-size: .875rem; color: var(--muted); }
 .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .4rem 1rem; }
 h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .sec-sub { margin: 0; font-size: .875rem; color: var(--muted); }
@@ -267,6 +273,15 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 </section>
 
 <main class="main wrap">
+  <section class="guia" aria-labelledby="guia-t">
+    <h2 id="guia-t">Cómo apuntarte o cambiar tus datos</h2>
+    <ol>
+      <li><span><b>Busca tu nombre</b> en el buscador de arriba: escribe tu apellido y pulsa sobre tu nombre.</span></li>
+      <li><span><b>Elige tu provincia</b> (Murcia o Alicante) y, si quieres, tu destino preferido: CAISS (INSS), Tesorería (TGSS) o ISM.</span></li>
+      <li><span><b>Escribe los 4 números de tu DNI</b> tal como aparecen en el listado oficial (si pone ***1234**, escribe 1234) y pulsa «Añadirme». Si ya estabas apuntado, pulsa «Guardar preferencias».</span></li>
+    </ol>
+    <p>Puedes repetirlo cuando quieras para cambiar de provincia o de destino. Cada persona está en una sola lista, Murcia o Alicante.</p>
+  </section>
   <div class="sec-head">
     <h2>Clasificación</h2>
     <p class="sec-sub">Ordenada por nota total transformada · <span id="upd">conectando…</span></p>
