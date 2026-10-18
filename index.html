@@ -118,6 +118,33 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .rules ol { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--muted); font-size: .9375rem; display: grid; gap: .25rem; }
 .rules ol b { color: var(--ink); font-weight: 700; }
 .rank { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .75rem; }
+.tools { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1rem; }
+.find { flex: 1 1 16rem; min-width: 0; }
+.fpos { height: 2.75rem; border: 1px solid var(--line); font-size: 1rem; }
+.fpos:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.fcount { margin-top: .6rem; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); }
+.seg button { border: 0; background: none; padding: .65rem .95rem; font-weight: 700; font-size: .875rem; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+.seg button:focus-visible { outline: 3px solid var(--lime); outline-offset: -3px; }
+.rank.compacta { gap: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+.fila { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr) 4.4rem 4.4rem 4.6rem; align-items: center; gap: .6rem; padding: .45rem .9rem; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.fila:first-child { border-top: 0; }
+.fila.head { padding-block: .55rem; background: var(--soft); font-size: .6875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.fila .fp { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--soft); font: 800 .875rem var(--f-display); }
+.fila.top .fp { background: var(--lime); color: var(--on-lime); }
+.fila .fn { min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fila .fn .badge { margin: 0 0 0 .45rem; vertical-align: middle; }
+.fila .fv { text-align: right; color: var(--muted); font-size: .875rem; }
+.fila .ft { text-align: right; font: 800 1.0625rem var(--f-display); }
+.fila.head .fv, .fila.head .ft { font: inherit; color: inherit; }
+.fila.hit, .card.hit { background: rgba(149, 193, 31, .14); }
+.rank.compacta .corte { border-top: 1px solid var(--line); padding: .35rem .9rem; }
+@media (max-width: 560px) {
+  .fila { grid-template-columns: 2.2rem minmax(0, 1fr) 4.2rem; padding-inline: .7rem; }
+  .fila .fv { display: none; }
+  .fila .fn { white-space: normal; overflow-wrap: anywhere; font-size: .9375rem; line-height: 1.25; }
+}
 .card {
   display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; column-gap: .9rem; row-gap: .95rem; align-items: center;
   background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 1rem 1.1rem; box-shadow: var(--shadow);
@@ -218,6 +245,17 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     </ol>
     <p class="sec-sub" style="margin:0 0 .9rem">En verde, los primeros 35 puestos: es una estimación orientativa de plazas, no una cifra oficial. La nota de corte es la del puesto 35 entre los inscritos.</p>
   </details>
+  <div class="tools">
+    <div class="fwrap find">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="fpos" class="field fpos" type="search" aria-label="Busca tu posición por nombre" placeholder="Busca tu posición por nombre" autocomplete="off" autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="seg" role="group" aria-label="Vista de la clasificación">
+      <button type="button" id="v-c" aria-pressed="true">Compacta</button>
+      <button type="button" id="v-d" aria-pressed="false">Detallada</button>
+    </div>
+  </div>
+  <p id="fcount" class="sec-sub fcount" hidden></p>
   <ol id="lista" class="rank"></ol>
   <div id="vacio" class="vacio"><b id="v-t">Cargando el listado…</b><span id="v-s"></span></div>
   <footer class="foot">
@@ -278,7 +316,8 @@ function compare(a, b) {
   var PLAZAS = 35;
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var members = new Map(), loaded = false, justAdded = null;
+  var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c';
+  try { vista = localStorage.getItem('vista') === 'd' ? 'd' : 'c'; } catch (e) {}
   var API = 'https://script.google.com/macros/s/AKfycbzDZR4HR3Ofpq0ZCcGlYAsd_eVonfMW-FaiA_vMKK5a9H_Dj_CIZRiTYO7UBnazGE4MZw/exec';
   var GS = true;
   function api(method, body) {
@@ -348,28 +387,58 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       $('v-t').textContent = loaded ? 'Todavía no hay nadie en la clasificación' : 'Cargando la clasificación…';
       $('v-s').textContent = loaded ? 'Busca tu nombre arriba y pulsa «Añadirme» para ser el primero.' : '';
     }
+    var compacta = vista === 'c';
+    list.className = 'rank' + (compacta ? ' compacta' : '');
+    var shown = 0;
+    if (compacta && rows.length) {
+      var hd = el('li', 'fila head'); hd.setAttribute('aria-hidden', 'true');
+      ['Nº', 'Nombre', '1ª parte', '2ª parte', 'Total'].forEach(function (h, j) { hd.append(el('span', j === 0 ? 'fh' : (j === 1 ? 'fn' : (j === 4 ? 'ft' : 'fv')), h)); });
+      list.append(hd);
+    }
     rows.forEach(function (r, i) {
-      var li = el('li', 'card' + (i < PLAZAS ? ' top' : ''));
-      li.append(el('div', 'pos', String(i + 1)));
-      var who = el('div', 'who'); who.append(el('span', 'nm', r.disp));
-      if (r.c) who.append(el('span', 'badge', 'Cupo reserva'));
-      if (i > 0) {
-        var c = compare(rows[i - 1], r);
-        if (c.l >= 0) who.append(el('span', 'tb', 'Misma nota que el puesto anterior · desempata: ' + LEVELS[c.l]));
+      var match = !filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); });
+      if (match) {
+        shown++;
+        var li;
+        if (compacta) {
+          li = el('li', 'fila' + (i < PLAZAS ? ' top' : ''));
+          li.append(el('span', 'fp', String(i + 1)));
+          var fn = el('span', 'fn'); fn.title = r.disp; fn.append(el('span', null, r.disp));
+          if (r.c) fn.append(el('span', 'badge', 'Cupo'));
+          li.append(fn, el('span', 'fv', nf.format(r.t1)), el('span', 'fv', nf.format(r.t2)), el('span', 'ft', nf.format(r.T)));
+        } else {
+          li = el('li', 'card' + (i < PLAZAS ? ' top' : ''));
+          li.append(el('div', 'pos', String(i + 1)));
+          var who = el('div', 'who'); who.append(el('span', 'nm', r.disp));
+          if (r.c) who.append(el('span', 'badge', 'Cupo reserva'));
+          if (i > 0) {
+            var c = compare(rows[i - 1], r);
+            if (c.l >= 0) who.append(el('span', 'tb', 'Misma nota que el puesto anterior · desempata: ' + LEVELS[c.l]));
+          }
+          li.append(who);
+          var nota = el('div', 'nota'); nota.append(el('b', null, nf.format(r.T)), el('small', null, 'Nota total'));
+          li.append(nota);
+          var parts = el('div', 'parts');
+          parts.append(part('1ª parte', r.t1, r.a1, r.f1), part('2ª parte', r.t2, r.a2, r.f2));
+          li.append(parts);
+        }
+        li.dataset.k = r.k;
+        if (filtro.length) li.classList.add('hit');
+        list.append(li);
       }
-      li.append(who);
-      var nota = el('div', 'nota'); nota.append(el('b', null, nf.format(r.T)), el('small', null, 'Nota total'));
-      li.append(nota);
-      var parts = el('div', 'parts');
-      parts.append(part('1ª parte', r.t1, r.a1, r.f1), part('2ª parte', r.t2, r.a2, r.f2));
-      li.append(parts);
-      list.append(li);
-      if (i === PLAZAS - 1 && rows.length > PLAZAS) { var cut = el('li', 'corte', 'Corte estimado · ' + PLAZAS + ' plazas'); cut.setAttribute('role', 'separator'); list.append(cut); }
+      if (!filtro.length && i === PLAZAS - 1 && rows.length > PLAZAS) { var cut = el('li', 'corte', 'Corte estimado · ' + PLAZAS + ' plazas'); cut.setAttribute('role', 'separator'); list.append(cut); }
     });
+    var fc = $('fcount');
+    if (filtro.length && rows.length) {
+      fc.hidden = false;
+      fc.textContent = shown ? (shown === 1 ? '1 persona encontrada' : shown + ' personas encontradas') + ' · el número es su puesto en la clasificación' : 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.';
+      if (!shown && compacta) list.textContent = '';
+    } else fc.hidden = true;
     if (justAdded != null) {
       var idx = rows.findIndex(function (r) { return r.k === justAdded; });
       if (idx >= 0) {
-        var card = list.querySelectorAll('.card')[idx];
+        var card = list.querySelector('[data-k="' + rows[idx].k + '"]');
+        if (!card) { filtro = []; $('fpos').value = ''; justAdded = rows[idx].k; render(); return; }
         card.classList.add('flash');
         toast('Añadido: ' + rows[idx].disp + ' · puesto ' + (idx + 1) + ' de ' + rows.length);
         var b = card.getBoundingClientRect();
@@ -476,6 +545,20 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   });
 
   /* ---------- Arranque ---------- */
+  function setVista(v) {
+    vista = v;
+    $('v-c').setAttribute('aria-pressed', String(v === 'c')); $('v-d').setAttribute('aria-pressed', String(v === 'd'));
+    try { localStorage.setItem('vista', v); } catch (e) {}
+    render();
+  }
+  $('v-c').addEventListener('click', function () { setVista('c'); });
+  $('v-d').addEventListener('click', function () { setVista('d'); });
+  $('fpos').addEventListener('input', function () {
+    var n = norm($('fpos').value);
+    filtro = n.length >= 2 ? n.split(' ') : [];
+    render();
+  });
+  $('v-c').setAttribute('aria-pressed', String(vista === 'c')); $('v-d').setAttribute('aria-pressed', String(vista === 'd'));
   q.disabled = false;
   render(); load();
   setInterval(function () { if (!document.hidden) load(); }, 60000);
