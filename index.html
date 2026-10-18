@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Clasificación de aprobados de Murcia del Cuerpo Administrativo de la Seguridad Social, con desempates.">
+<meta name="description" content="Clasificación de aprobados de Murcia y Alicante del Cuerpo Administrativo de la Seguridad Social, con desempates.">
 <meta name="robots" content="noindex">
-<title>Aprobados Murcia</title>
+<title>Aprobados Murcia y Alicante</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap">
@@ -138,6 +138,19 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .fila .fv { text-align: right; color: var(--muted); font-size: .875rem; }
 .fila .ft { text-align: right; font: 800 1.0625rem var(--f-display); }
 .fila.head .fv, .fila.head .ft { font: inherit; color: inherit; }
+.prefs { display: grid; gap: .45rem; }
+.pref-l { font-size: .8125rem; font-weight: 700; }
+.pref-l small { font-weight: 500; color: var(--muted); }
+.pref-opts { display: flex; flex-wrap: wrap; gap: .4rem; }
+.po, .chip, .pv { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px; padding: .45rem .8rem; font-size: .8125rem; font-weight: 700; cursor: pointer; }
+.po[aria-pressed="true"], .chip[aria-pressed="true"], .pv[aria-pressed="true"] { background: var(--ink); color: var(--card); border-color: var(--ink); }
+.po:focus-visible, .chip:focus-visible, .pv:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.pfil { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-top: .75rem; }
+.pfil-l { font-size: .8125rem; font-weight: 700; color: var(--muted); margin-right: .2rem; }
+.alt { margin: 0; padding: .55rem .7rem; border-radius: 10px; background: var(--soft); font-size: .8125rem; line-height: 1.4; color: var(--ink); }
+.badge.prov { background: transparent; }
+.badge.pref { background: rgba(149, 193, 31, .18); border-color: rgba(149, 193, 31, .55); }
+.fg { margin-left: .45rem; font-size: .75rem; font-weight: 500; color: var(--muted); }
 .fila.hit, .card.hit { background: rgba(149, 193, 31, .14); }
 .rank.compacta .corte { border-top: 1px solid var(--line); padding: .35rem .9rem; }
 @media (max-width: 560px) {
@@ -201,9 +214,9 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 
 <section class="hero-wrap wrap">
   <div class="hero">
-    <p class="eyebrow">Acceso libre · Turno general</p>
-    <h1>Aprobados Murcia</h1>
-    <p class="lead">Escribe tus apellidos, elige tu nombre y pulsa «Añadirme». Entras al momento en la clasificación con las notas del listado oficial.</p>
+    <p class="eyebrow">Acceso libre · Turno general y reserva</p>
+    <h1>Aprobados Murcia y Alicante</h1>
+    <p class="lead">Escribe tus apellidos, elige tu nombre, indica tu provincia y pulsa «Añadirme». Entras al momento en la clasificación con las notas del listado oficial.</p>
     <div class="combo">
       <label for="q">Busca tu nombre</label>
       <div class="fwrap">
@@ -214,15 +227,32 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
       <p id="aviso" class="aviso" hidden></p>
       <div id="conf" class="conf" hidden>
         <div class="conf-who"><b id="c-nm"></b><span id="c-sub"></span></div>
+        <div class="prefs">
+          <span class="pref-l" id="prov-l">Provincia preferida</span>
+          <div class="pref-opts" role="group" aria-labelledby="prov-l">
+            <button type="button" class="pv" data-v="MUR" aria-pressed="false">Murcia</button>
+            <button type="button" class="pv" data-v="ALI" aria-pressed="false">Alicante</button>
+          </div>
+          <p class="alt" id="alt-w" hidden><span id="alt-s"></span></p>
+        </div>
+        <div class="prefs">
+          <span class="pref-l" id="pref-l">Destino preferido <small>(opcional)</small></span>
+          <div class="pref-opts" role="group" aria-labelledby="pref-l">
+            <button type="button" class="po" data-p="INSS" aria-pressed="false">CAISS (INSS)</button>
+            <button type="button" class="po" data-p="TGSS" aria-pressed="false">Tesorería (TGSS)</button>
+            <button type="button" class="po" data-p="ISM" aria-pressed="false">ISM</button>
+          </div>
+        </div>
         <button id="c-go" class="go" type="button">Añadirme a la clasificación</button>
+        <button id="c-save" class="go" type="button" hidden>Guardar destino preferido</button>
         <button id="c-x" class="cx" type="button">Elegir otro nombre</button>
       </div>
     </div>
     <dl class="stats">
       <div class="stat"><dt>En el listado</dt><dd id="s-n">0</dd></div>
       <div class="stat"><dt>Nota más alta</dt><dd id="s-max">–</dd></div>
-      <div class="stat"><dt>Plazas estimadas</dt><dd id="s-plz">35</dd></div>
-<div class="stat"><dt>Nota de corte</dt><dd id="s-avg">–</dd></div>
+      <div class="stat"><dt>Plazas Murcia</dt><dd id="s-plz">35</dd></div>
+<div class="stat"><dt>Nota de corte Murcia</dt><dd id="s-avg">–</dd></div>
     </dl>
   </div>
 </section>
@@ -243,7 +273,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
       <li><b>Fallos de la 2ª parte</b>: menos fallos, primero.</li>
       <li><b>Orden alfabético</b> contando desde la U: U, V, W, X, Y, Z, A, B… hasta la T.</li>
     </ol>
-    <p class="sec-sub" style="margin:0 0 .9rem">En verde, los primeros 35 puestos: es una estimación orientativa de plazas, no una cifra oficial. La nota de corte es la del puesto 35 entre los inscritos.</p>
+    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona está en una sola lista, Murcia o Alicante, y puede cambiarse cuando quiera. En verde, los 35 primeros de cada provincia: es una estimación orientativa de plazas, no una cifra oficial. La nota de corte es la del puesto 35 de Murcia entre los inscritos. Al filtrar por provincia, el número de cada fila es su puesto en esa provincia.</p>
   </details>
   <div class="tools">
     <div class="fwrap find">
@@ -254,6 +284,20 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
       <button type="button" id="v-c" aria-pressed="true">Compacta</button>
       <button type="button" id="v-d" aria-pressed="false">Detallada</button>
     </div>
+  </div>
+  <div class="pfil" role="group" aria-label="Filtrar por provincia">
+    <span class="pfil-l">Provincia:</span>
+    <button type="button" class="chip" data-v="" aria-pressed="true">Todas</button>
+    <button type="button" class="chip" data-v="MUR" aria-pressed="false">Murcia</button>
+    <button type="button" class="chip" data-v="ALI" aria-pressed="false">Alicante</button>
+  </div>
+  <div class="pfil" role="group" aria-label="Filtrar por destino preferido">
+    <span class="pfil-l">Destino:</span>
+    <button type="button" class="chip" data-f="" aria-pressed="true">Todos</button>
+    <button type="button" class="chip" data-f="INSS" aria-pressed="false">CAISS (INSS)</button>
+    <button type="button" class="chip" data-f="TGSS" aria-pressed="false">Tesorería (TGSS)</button>
+    <button type="button" class="chip" data-f="ISM" aria-pressed="false">ISM</button>
+    <button type="button" class="chip" data-f="none" aria-pressed="false">Sin indicar</button>
   </div>
   <p id="fcount" class="sec-sub fcount" hidden></p>
   <ol id="lista" class="rank"></ol>
@@ -314,9 +358,12 @@ function compare(a, b) {
   var $ = function (id) { return document.getElementById(id); };
   var nf = new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var PLAZAS = 35;
+var PREFS = { INSS: 'CAISS (INSS)', TGSS: 'Tesorería (TGSS)', ISM: 'ISM' };
+var PROVS = { MUR: 'Murcia', ALI: 'Alicante' };
+var PLAZAS_P = { MUR: 35, ALI: 35 };
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c';
+  var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c', prefFiltro = '', provFiltro = '';
   try { vista = localStorage.getItem('vista') === 'd' ? 'd' : 'c'; } catch (e) {}
   var API = 'https://script.google.com/macros/s/AKfycbzDZR4HR3Ofpq0ZCcGlYAsd_eVonfMW-FaiA_vMKK5a9H_Dj_CIZRiTYO7UBnazGE4MZw/exec';
   var GS = true;
@@ -325,12 +372,20 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var url = method === 'POST' ? API : API + '?api=listar&t=' + Date.now();
     return fetch(url, opts).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.error) throw new Error(j.error);
-      return j.codigos || [];
+      return j;
     });
   }
-  function setMembers(codes) {
+  function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false }; }
+  function enProv(mm, p) { return mm.prov === p; }
+  function posEn(r, p, mmSup) {
+    var n = 1;
+    members.forEach(function (mm, k) { if (k !== r.k && enProv(mm, p) && compare(DATA[k], r).c < 0) n++; });
+    return enProv(mmSup || infoDe(r.k), p) ? n : null;
+  }
+  function setMembers(resp) {
+    var codes = Array.isArray(resp) ? resp : ((resp && resp.codigos) || []), prefs = (resp && resp.prefs) || {}, provs = (resp && resp.provs) || {}, alts = (resp && resp.alts) || {};
     var m = new Map();
-    (codes || []).forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, 1); });
+    codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: provs[c] === 'ALI' ? 'ALI' : 'MUR', alt: false }); });
     members = m; loaded = true;
     $('upd').textContent = 'actualizada a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     render();
@@ -379,7 +434,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     list.textContent = '';
     $('s-n').textContent = String(rows.length);
     if (rows.length) {
-            $('s-max').textContent = nf.format(rows[0].T); $('s-avg').textContent = rows.length >= PLAZAS ? nf.format(rows[PLAZAS - 1].T) : '–';
+            $('s-max').textContent = nf.format(rows[0].T); var mur = rows.filter(function (x) { return infoDe(x.k).prov === 'MUR'; }); $('s-avg').textContent = mur.length >= PLAZAS ? nf.format(mur[PLAZAS - 1].T) : '–';
     } else { $('s-max').textContent = '–'; $('s-avg').textContent = '–'; }
     var vac = $('vacio');
     vac.hidden = rows.length > 0;
@@ -389,28 +444,41 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     }
     var compacta = vista === 'c';
     list.className = 'rank' + (compacta ? ' compacta' : '');
-    var shown = 0;
+    var shown = 0, grupo = 0, filtrando = filtro.length || prefFiltro || provFiltro, cnt = { MUR: 0, ALI: 0 }, tot = { MUR: 0, ALI: 0 };
+    rows.forEach(function (x) { var m0 = infoDe(x.k); if (enProv(m0, 'MUR')) tot.MUR++; if (enProv(m0, 'ALI')) tot.ALI++; });
     if (compacta && rows.length) {
       var hd = el('li', 'fila head'); hd.setAttribute('aria-hidden', 'true');
       ['Nº', 'Nombre', '1ª parte', '2ª parte', 'Total'].forEach(function (h, j) { hd.append(el('span', j === 0 ? 'fh' : (j === 1 ? 'fn' : (j === 4 ? 'ft' : 'fv')), h)); });
       list.append(hd);
     }
     rows.forEach(function (r, i) {
-      var match = !filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); });
+      var mm = infoDe(r.k), pr = mm.pref;
+      if (enProv(mm, 'MUR')) cnt.MUR++;
+      if (enProv(mm, 'ALI')) cnt.ALI++;
+      var esTop = cnt[mm.prov] <= PLAZAS_P[mm.prov];
+      var posV = provFiltro ? cnt[provFiltro] : i + 1;
+      var match = (!provFiltro || enProv(mm, provFiltro)) && (!filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); })) && (!prefFiltro || (prefFiltro === 'none' ? !pr : pr === prefFiltro));
+      if (pr && prefFiltro === pr) grupo++;
       if (match) {
         shown++;
         var li;
         if (compacta) {
-          li = el('li', 'fila' + (i < PLAZAS ? ' top' : ''));
-          li.append(el('span', 'fp', String(i + 1)));
+          li = el('li', 'fila' + (esTop ? ' top' : ''));
+          li.append(el('span', 'fp', String(posV)));
           var fn = el('span', 'fn'); fn.title = r.disp; fn.append(el('span', null, r.disp));
           if (r.c) fn.append(el('span', 'badge', 'Cupo'));
+          if (pr) fn.append(el('span', 'badge pref', pr));
+          if (mm.prov === 'ALI') fn.append(el('span', 'badge prov', 'Alicante'));
+          if (prefFiltro && prefFiltro !== 'none') fn.append(el('span', 'fg', grupo + 'º en ' + prefFiltro));
           li.append(fn, el('span', 'fv', nf.format(r.t1)), el('span', 'fv', nf.format(r.t2)), el('span', 'ft', nf.format(r.T)));
         } else {
-          li = el('li', 'card' + (i < PLAZAS ? ' top' : ''));
-          li.append(el('div', 'pos', String(i + 1)));
+          li = el('li', 'card' + (esTop ? ' top' : ''));
+          li.append(el('div', 'pos', String(posV)));
           var who = el('div', 'who'); who.append(el('span', 'nm', r.disp));
           if (r.c) who.append(el('span', 'badge', 'Cupo reserva'));
+          if (pr) who.append(el('span', 'badge pref', PREFS[pr]));
+          who.append(el('span', 'badge prov', PROVS[mm.prov]));
+          if (prefFiltro && prefFiltro !== 'none') who.append(el('span', 'tb', grupo + 'º entre quienes prefieren ' + PREFS[prefFiltro]));
           if (i > 0) {
             var c = compare(rows[i - 1], r);
             if (c.l >= 0) who.append(el('span', 'tb', 'Misma nota que el puesto anterior · desempata: ' + LEVELS[c.l]));
@@ -426,19 +494,20 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
         if (filtro.length) li.classList.add('hit');
         list.append(li);
       }
-      if (!filtro.length && i === PLAZAS - 1 && rows.length > PLAZAS) { var cut = el('li', 'corte', 'Corte estimado · ' + PLAZAS + ' plazas'); cut.setAttribute('role', 'separator'); list.append(cut); }
+      var pc0 = provFiltro || 'MUR';
+      if (provFiltro && !filtro.length && !prefFiltro && PLAZAS_P[pc0] && enProv(mm, pc0) && cnt[pc0] === PLAZAS_P[pc0] && tot[pc0] > PLAZAS_P[pc0]) { var cut = el('li', 'corte', 'Corte estimado · ' + PLAZAS_P[pc0] + ' plazas en ' + PROVS[pc0]); cut.setAttribute('role', 'separator'); list.append(cut); }
     });
     var fc = $('fcount');
-    if (filtro.length && rows.length) {
+    if (filtrando && rows.length) {
       fc.hidden = false;
-      fc.textContent = shown ? (shown === 1 ? '1 persona encontrada' : shown + ' personas encontradas') + ' · el número es su puesto en la clasificación' : 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.';
+      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' · el número es su puesto en ' + PROVS[provFiltro] : ' · el número es su puesto en la clasificación general') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
       if (!shown && compacta) list.textContent = '';
     } else fc.hidden = true;
     if (justAdded != null) {
       var idx = rows.findIndex(function (r) { return r.k === justAdded; });
       if (idx >= 0) {
         var card = list.querySelector('[data-k="' + rows[idx].k + '"]');
-        if (!card) { filtro = []; $('fpos').value = ''; justAdded = rows[idx].k; render(); return; }
+        if (!card) { filtro = []; $('fpos').value = ''; prefFiltro = ''; provFiltro = ''; document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.f === '')); }); document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.v === '')); }); justAdded = rows[idx].k; render(); return; }
         card.classList.add('flash');
         toast('Añadido: ' + rows[idx].disp + ' · puesto ' + (idx + 1) + ' de ' + rows.length);
         var b = card.getBoundingClientRect();
@@ -453,16 +522,25 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     q.value = ''; res = []; closeSug();
     var conf = $('conf'), go = $('c-go');
     $('c-nm').textContent = r.disp;
+    var mm0 = infoDe(r.k); selPref = mm0.pref; selProv = members.has(r.k) ? mm0.prov : ''; selAlt = mm0.alt; curR = r; paintPrefs();
+    var save = $('c-save'); save.hidden = true;
     if (members.has(r.k)) {
       var pos = ranked().findIndex(function (x) { return x.k === r.k; }) + 1;
-      $('c-sub').textContent = r.d + ' · Nota ' + nf.format(r.T) + ' · Ya estás en la clasificación, puesto ' + pos + '.';
-      go.hidden = true;
+      $('c-sub').textContent = r.d + ' · Nota ' + nf.format(r.T) + ' · Ya estás en la clasificación: puesto ' + pos + ' general' + ', ' + posEn(r, mm0.prov) + 'º en ' + PROVS[mm0.prov] + '. Puedes cambiar de provincia o de destino cuando quieras.';
+      go.hidden = true; save.hidden = false; save.disabled = false; save.textContent = 'Guardar preferencias';
+      save.onclick = function () {
+        save.disabled = true; save.textContent = 'Guardando…';
+        api('POST', { accion: 'pref', k: r.k, dni: r.d, pref: selPref, prov: selProv, alt: false })
+          .then(function (st) { $('conf').hidden = true; setMembers(st); toast('Preferencias guardadas · ' + PROVS[selProv]); })
+          .catch(function (e) { save.disabled = false; save.textContent = 'Guardar preferencias'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo guardar. Inténtalo de nuevo.', 'err'); });
+      };
     } else {
       $('c-sub').textContent = r.d + ' · Nota ' + nf.format(r.T) + ' · Comprueba que eres tú antes de añadirte.';
       go.hidden = false; go.disabled = !GS; go.textContent = 'Añadirme a la clasificación';
       go.onclick = function () {
+        if (!selProv) { toast('Elige Murcia o Alicante antes de añadirte.', 'err'); return; }
         go.disabled = true; go.textContent = 'Añadiendo…';
-        api('POST', { k: r.k, dni: r.d })
+        api('POST', { k: r.k, dni: r.d, pref: selPref, prov: selProv, alt: false })
           .then(function (codes) { $('conf').hidden = true; justAdded = r.k; setMembers(codes); })
           .catch(function (e) { go.disabled = false; go.textContent = 'Añadirme a la clasificación'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo añadir. Inténtalo de nuevo.', 'err'); });
       };
@@ -470,6 +548,27 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     conf.hidden = false; go.hidden ? $('c-x').focus() : go.focus();
   }
   $('c-x').addEventListener('click', function () { $('conf').hidden = true; q.focus(); });
+  var selPref = '', selProv = '', selAlt = false, curR = null;
+  function paintPrefs() {
+    document.querySelectorAll('.po').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.p === selPref)); });
+    document.querySelectorAll('.pv').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === selProv)); });
+    var w = $('alt-w'), show = false;
+    if (curR && selProv === 'MUR') {
+      var pm = posEn(curR, 'MUR', { prov: 'MUR', alt: false, pref: '' });
+      if (pm > PLAZAS_P.MUR) {
+        var pa = posEn(curR, 'ALI', { prov: 'ALI', alt: false, pref: '' });
+        show = true;
+        $('alt-s').textContent = 'En Murcia serías el ' + pm + 'º. Si eligieras Alicante, serías el ' + pa + 'º. Solo puedes estar en una lista y puedes cambiarte cuando quieras.';
+      }
+    }
+    w.hidden = !show;
+  }
+  document.querySelectorAll('.pv').forEach(function (b) {
+    b.addEventListener('click', function () { selProv = b.dataset.v; paintPrefs(); });
+  });
+  document.querySelectorAll('.po').forEach(function (b) {
+    b.addEventListener('click', function () { selPref = selPref === b.dataset.p ? '' : b.dataset.p; paintPrefs(); });
+  });
 
   /* ---------- Buscador ---------- */
   function search(tk) {
@@ -552,6 +651,20 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     render();
   }
   $('v-c').addEventListener('click', function () { setVista('c'); });
+  document.querySelectorAll('.chip[data-f]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      prefFiltro = b.dataset.f;
+      document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      render();
+    });
+  });
+  document.querySelectorAll('.chip[data-v]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      provFiltro = b.dataset.v;
+      document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      render();
+    });
+  });
   $('v-d').addEventListener('click', function () { setVista('d'); });
   $('fpos').addEventListener('input', function () {
     var n = norm($('fpos').value);
