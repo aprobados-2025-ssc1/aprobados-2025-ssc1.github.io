@@ -172,6 +172,8 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .pfil-l { font-size: .8125rem; font-weight: 700; color: var(--muted); margin-right: .2rem; }
 .alt { margin: 0; padding: .55rem .7rem; border-radius: 10px; background: var(--soft); font-size: .8125rem; line-height: 1.4; color: var(--ink); }
 .badge.prov { background: transparent; }
+.cg { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .3rem; padding: .2rem .35rem .2rem .55rem; border: 1px dashed var(--line); border-radius: 18px; }
+.cg-l { font-size: .625rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-left: .15rem; }
 .badge.zona { background: transparent; border-style: dashed; }
 /* Entrada: texto a máquina de escribir y transición a la página */
 #intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px; background: radial-gradient(120% 120% at 50% 0%, #16306a 0%, #0B1F44 55%, #061229 100%); color: #EDF1FA; transition: clip-path .9s cubic-bezier(.7, 0, .2, 1), opacity .9s ease; clip-path: circle(150% at 50% 50%); }
@@ -343,16 +345,12 @@ body.intro-on { overflow: hidden; }
         <div class="prefs">
           <span class="pref-l" id="prov-l">Provincia preferida</span>
           <div class="pref-opts" role="group" aria-labelledby="prov-l">
-            <button type="button" class="pv" data-v="MUR" aria-pressed="false">Murcia</button>
-            <button type="button" class="pv" data-v="ALI" aria-pressed="false">Alicante</button>
-            <button type="button" class="pv" data-v="VAL" aria-pressed="false">Valencia</button>
-            <button type="button" class="pv" data-v="MAD" aria-pressed="false">Madrid</button>
-            <button type="button" class="pv" data-v="ALM" aria-pressed="false">Almería</button>
-            <button type="button" class="pv" data-v="SEV" aria-pressed="false">Sevilla</button>
-            <button type="button" class="pv" data-v="COR" aria-pressed="false">Córdoba</button>
-            <button type="button" class="pv" data-v="MAL" aria-pressed="false">Málaga</button>
-            <button type="button" class="pv" data-v="ALB" aria-pressed="false">Albacete</button>
-            <button type="button" class="pv" data-v="ZAR" aria-pressed="false">Zaragoza</button>
+            <div class="cg"><span class="cg-l">Región de Murcia</span><button type="button" class="pv" data-v="MUR" aria-pressed="false">Murcia</button></div>
+            <div class="cg"><span class="cg-l">Comunidad Valenciana</span><button type="button" class="pv" data-v="ALI" aria-pressed="false">Alicante</button><button type="button" class="pv" data-v="VAL" aria-pressed="false">Valencia</button></div>
+            <div class="cg"><span class="cg-l">Comunidad de Madrid</span><button type="button" class="pv" data-v="MAD" aria-pressed="false">Madrid</button></div>
+            <div class="cg"><span class="cg-l">Andalucía</span><button type="button" class="pv" data-v="ALM" aria-pressed="false">Almería</button><button type="button" class="pv" data-v="COR" aria-pressed="false">Córdoba</button><button type="button" class="pv" data-v="MAL" aria-pressed="false">Málaga</button><button type="button" class="pv" data-v="SEV" aria-pressed="false">Sevilla</button></div>
+            <div class="cg"><span class="cg-l">Castilla-La Mancha</span><button type="button" class="pv" data-v="ALB" aria-pressed="false">Albacete</button></div>
+            <div class="cg"><span class="cg-l">Aragón</span><button type="button" class="pv" data-v="ZAR" aria-pressed="false">Zaragoza</button></div>
           </div>
           <p class="alt" id="alt-w" hidden><span id="alt-s"></span></p>
         </div>
@@ -441,16 +439,12 @@ body.intro-on { overflow: hidden; }
   <div class="pfil" role="group" aria-label="Filtrar por provincia">
     <span class="pfil-l">Provincia:</span>
     <button type="button" class="chip" data-v="" aria-pressed="false">Todas</button>
-    <button type="button" class="chip" data-v="MUR" aria-pressed="true">Murcia</button>
-    <button type="button" class="chip" data-v="ALI" aria-pressed="false">Alicante</button>
-    <button type="button" class="chip" data-v="VAL" aria-pressed="false">Valencia</button>
-    <button type="button" class="chip" data-v="MAD" aria-pressed="false">Madrid</button>
-    <button type="button" class="chip" data-v="ALM" aria-pressed="false">Almería</button>
-    <button type="button" class="chip" data-v="SEV" aria-pressed="false">Sevilla</button>
-    <button type="button" class="chip" data-v="COR" aria-pressed="false">Córdoba</button>
-    <button type="button" class="chip" data-v="MAL" aria-pressed="false">Málaga</button>
-    <button type="button" class="chip" data-v="ALB" aria-pressed="false">Albacete</button>
-    <button type="button" class="chip" data-v="ZAR" aria-pressed="false">Zaragoza</button>
+    <div class="cg"><span class="cg-l">Región de Murcia</span><button type="button" class="chip" data-v="MUR" aria-pressed="true">Murcia</button></div>
+    <div class="cg"><span class="cg-l">Comunidad Valenciana</span><button type="button" class="chip" data-v="ALI" aria-pressed="false">Alicante</button><button type="button" class="chip" data-v="VAL" aria-pressed="false">Valencia</button></div>
+    <div class="cg"><span class="cg-l">Comunidad de Madrid</span><button type="button" class="chip" data-v="MAD" aria-pressed="false">Madrid</button></div>
+    <div class="cg"><span class="cg-l">Andalucía</span><button type="button" class="chip" data-v="ALM" aria-pressed="false">Almería</button><button type="button" class="chip" data-v="COR" aria-pressed="false">Córdoba</button><button type="button" class="chip" data-v="MAL" aria-pressed="false">Málaga</button><button type="button" class="chip" data-v="SEV" aria-pressed="false">Sevilla</button></div>
+    <div class="cg"><span class="cg-l">Castilla-La Mancha</span><button type="button" class="chip" data-v="ALB" aria-pressed="false">Albacete</button></div>
+    <div class="cg"><span class="cg-l">Aragón</span><button type="button" class="chip" data-v="ZAR" aria-pressed="false">Zaragoza</button></div>
   </div>
   <div class="pfil" role="group" aria-label="Filtrar por destino preferido">
     <span class="pfil-l">Destino:</span>
