@@ -8,7 +8,7 @@
 <title>Aprobados Murcia y Alicante</title>
 <meta property="og:title" content="Aprobados Murcia y Alicante">
 <meta property="og:description" content="Clasificación de aprobados del Administrativo de la Seguridad Social. Apúntate y mira tu posición.">
-<meta property="og:url" content="https://aprobados-murcia.github.io/">
+<meta property="og:url" content="https://aprobados-2025-ssc1.github.io/">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -266,7 +266,8 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
         <div class="prefs">
           <span class="pref-l" id="pref-l">Destino preferido <small>(opcional)</small></span>
           <div class="pref-opts" role="group" aria-labelledby="pref-l">
-            <button type="button" class="po" data-p="INSS" aria-pressed="false">CAISS (INSS)</button>
+            <button type="button" class="po" data-p="CAISS" aria-pressed="false">CAISS</button>
+            <button type="button" class="po" data-p="INSS" aria-pressed="false">INSS</button>
             <button type="button" class="po" data-p="TGSS" aria-pressed="false">Tesorería (TGSS)</button>
             <button type="button" class="po" data-p="ISM" aria-pressed="false">ISM</button>
           </div>
@@ -287,7 +288,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
       <div class="stat"><dt>Corte Murcia</dt><dd id="s-cm">–</dd><small id="s-cm2"></small></div>
       <div class="stat"><dt>Corte Alicante</dt><dd id="s-ca">–</dd><small id="s-ca2"></small></div>
     </dl>
-    <a class="wa" href="https://wa.me/?text=Clasificaci%C3%B3n%20de%20aprobados%20del%20Administrativo%20de%20la%20Seguridad%20Social%20en%20Murcia%20y%20Alicante.%20Ap%C3%BAntate%20y%20mira%20tu%20posici%C3%B3n%3A%20https%3A//aprobados-murcia.github.io/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>Compartir por WhatsApp</a>
+    <a class="wa" href="https://wa.me/?text=Clasificaci%C3%B3n%20de%20aprobados%20del%20Administrativo%20de%20la%20Seguridad%20Social%20en%20Murcia%20y%20Alicante.%20Ap%C3%BAntate%20y%20mira%20tu%20posici%C3%B3n%3A%20https%3A//aprobados-2025-ssc1.github.io/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>Compartir por WhatsApp</a>
   </div>
 </section>
 
@@ -300,7 +301,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
     <h2 id="guia-t">Cómo apuntarte o cambiar tus datos</h2>
     <ol>
       <li><span><b>Busca tu nombre</b> en el buscador de arriba: escribe tu apellido y pulsa sobre tu nombre.</span></li>
-      <li><span><b>Elige tu provincia</b> (Murcia o Alicante) y, si quieres, tu destino preferido: CAISS (INSS), Tesorería (TGSS) o ISM.</span></li>
+      <li><span><b>Elige tu provincia</b> (Murcia o Alicante) y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM.</span></li>
       <li><span><b>Escribe los 4 números de tu DNI</b> tal como aparecen en el listado oficial (si pone ***1234**, escribe 1234) y pulsa «Añadirme». Si ya estabas apuntado, pulsa «Guardar preferencias».</span></li>
     </ol>
     <p>Puedes repetirlo cuando quieras para cambiar de provincia o de destino. Cada persona está en una sola lista, Murcia o Alicante.</p>
@@ -341,7 +342,8 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
   <div class="pfil" role="group" aria-label="Filtrar por destino preferido">
     <span class="pfil-l">Destino:</span>
     <button type="button" class="chip" data-f="" aria-pressed="true">Todos</button>
-    <button type="button" class="chip" data-f="INSS" aria-pressed="false">CAISS (INSS)</button>
+    <button type="button" class="chip" data-f="CAISS" aria-pressed="false">CAISS</button>
+    <button type="button" class="chip" data-f="INSS" aria-pressed="false">INSS</button>
     <button type="button" class="chip" data-f="TGSS" aria-pressed="false">Tesorería (TGSS)</button>
     <button type="button" class="chip" data-f="ISM" aria-pressed="false">ISM</button>
     <button type="button" class="chip" data-f="none" aria-pressed="false">Sin indicar</button>
@@ -405,7 +407,7 @@ function compare(a, b) {
   var $ = function (id) { return document.getElementById(id); };
   var nf = new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var PLAZAS = 35;
-var PREFS = { INSS: 'CAISS (INSS)', TGSS: 'Tesorería (TGSS)', ISM: 'ISM' };
+var PREFS = { CAISS: 'CAISS', INSS: 'INSS', TGSS: 'Tesorería (TGSS)', ISM: 'ISM' };
 var PROVS = { MUR: 'Murcia', ALI: 'Alicante' };
 var PLAZAS_P = { MUR: 35, ALI: 35 };
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
