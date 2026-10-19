@@ -181,6 +181,22 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .ops .pn .sem { display: flex; margin-top: .15rem; }
 .sem i { width: .65rem; height: .65rem; border-radius: 50%; flex: none; }
 .sem.v i { background: #2E9E44; } .sem.a i { background: #E8A317; } .sem.r i { background: #D63A2F; }
+.cver { display: inline-block; margin-top: .9rem; font-weight: 700; font-size: .875rem; color: var(--lime); text-decoration: none; }
+.cver:hover { text-decoration: underline; }
+.cortes { margin: 0 0 2rem; scroll-margin-top: 1rem; }
+.ctab-w { margin-top: .8rem; border: 1px solid var(--line); border-radius: 14px; background: var(--card); overflow: hidden; }
+.ctab { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.ctab th, .ctab td { padding: .45rem .7rem; text-align: left; border-top: 1px solid var(--line); }
+.ctab thead th { border-top: 0; font-size: .6875rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ctab .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ctab thead th:not(:first-child) { text-align: right; }
+.ctab .cc { font-weight: 800; }
+.ctab .llena { display: block; font-size: .6875rem; font-weight: 600; color: var(--muted); }
+.ctab .cgrp th { background: var(--soft); font-size: .75rem; font-weight: 700; color: var(--muted); }
+.ctab .crow button { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--ink); cursor: pointer; text-align: left; }
+.ctab .crow button:hover { text-decoration: underline; }
+.ctab .crow button:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.ctab .crow.sel td { background: rgba(149, 193, 31, .14); }
 .desn { margin: .8rem 0 0; font-size: .8125rem; line-height: 1.45; color: var(--hero-muted); }
 .seml { margin: 0 0 .5rem; font-size: .75rem; line-height: 1.5; color: var(--muted); }
 .seml .sem { margin-right: .3rem; }
@@ -352,7 +368,7 @@ body.intro-on { overflow: hidden; }
   <div class="hero">
     <p class="eyebrow">Todas las provincias · Turno general y reserva</p>
     <h1>Aprobados SSC1 2025</h1>
-    <p class="lead">Busca tu nombre, elige hasta 8 provincias por orden de preferencia, escribe los 4 números de tu DNI del listado oficial y pulsa «Añadirme». Verás en qué provincia entrarías según tu nota.</p>
+    <p class="lead">Busca tu nombre, elige tus provincias por orden de preferencia (puedes añadirlas todas), escribe los 4 números de tu DNI del listado oficial y pulsa «Añadirme». Verás en qué provincia entrarías según tu nota.</p>
     <div class="combo">
       <label for="q">Busca tu nombre</label>
       <div class="fwrap">
@@ -364,7 +380,7 @@ body.intro-on { overflow: hidden; }
       <div id="conf" class="conf" hidden>
         <div class="conf-who"><b id="c-nm"></b><span id="c-sub"></span></div>
         <div class="prefs">
-          <span class="pref-l" id="prov-l">Tus provincias por orden de preferencia <small>(hasta 8)</small></span>
+          <span class="pref-l" id="prov-l">Tus provincias por orden de preferencia <small>(puedes añadir todas, en orden)</small></span>
           <ol id="ops-list" class="ops" aria-labelledby="prov-l"></ol>
           <p class="seml" id="sem-l" hidden>Semáforo: <span class="sem v"><i></i>con margen</span> <span class="sem a"><i></i>justo en el corte</span> <span class="sem r"><i></i>no entras</span><br>Mira cada provincia por separado, como si fuera tu 1ª opción, con las personas apuntadas hasta ahora.</p>
           <select id="ops-add" class="field selp" aria-label="Añadir provincia a tus preferencias"><option value="">+ Añadir provincia…</option><optgroup label="Andalucía"><option value="ALM">Almería (20)</option><option value="CAD">Cádiz (28)</option><option value="COR">Córdoba (15)</option><option value="GRA">Granada (12)</option><option value="HUE">Huelva (15)</option><option value="JAE">Jaén (11)</option><option value="MAL">Málaga (22)</option><option value="SEV">Sevilla (42)</option></optgroup><optgroup label="Aragón"><option value="HUS">Huesca (15)</option><option value="TER">Teruel (8)</option><option value="ZAR">Zaragoza (28)</option></optgroup><optgroup label="Principado de Asturias"><option value="AST">Asturias (14)</option></optgroup><optgroup label="Illes Balears"><option value="BAL">Illes Balears (38)</option></optgroup><optgroup label="Canarias"><option value="LPA">Las Palmas (20)</option><option value="TFE">Santa Cruz de Tenerife (26)</option></optgroup><optgroup label="Cantabria"><option value="CAN">Cantabria (17)</option></optgroup><optgroup label="Castilla y León"><option value="AVI">Ávila (13)</option><option value="BUR">Burgos (17)</option><option value="LEO">León (5)</option><option value="PAL">Palencia (11)</option><option value="SAL">Salamanca (13)</option><option value="SEG">Segovia (10)</option><option value="SOR">Soria (7)</option><option value="VLL">Valladolid (16)</option><option value="ZAM">Zamora (9)</option></optgroup><optgroup label="Castilla-La Mancha"><option value="ALB">Albacete (9)</option><option value="CRE">Ciudad Real (13)</option><option value="CUE">Cuenca (11)</option><option value="GUA">Guadalajara (13)</option><option value="TOL">Toledo (18)</option></optgroup><optgroup label="Cataluña"><option value="BAR">Barcelona (99)</option><option value="GIR">Girona (26)</option><option value="LLE">Lleida (21)</option><option value="TAR">Tarragona (27)</option></optgroup><optgroup label="Comunidad Valenciana"><option value="ALI">Alicante (34)</option><option value="CAS">Castellón (19)</option><option value="VAL">Valencia (53)</option></optgroup><optgroup label="Extremadura"><option value="BAD">Badajoz (16)</option><option value="CAC">Cáceres (16)</option></optgroup><optgroup label="Galicia"><option value="ACO">A Coruña (26)</option><option value="LUG">Lugo (8)</option><option value="OUR">Ourense (1)</option><option value="PON">Pontevedra (22)</option></optgroup><optgroup label="Comunidad de Madrid"><option value="MAD">Madrid (228)</option></optgroup><optgroup label="Región de Murcia"><option value="MUR">Murcia (32)</option></optgroup><optgroup label="Comunidad Foral de Navarra"><option value="NAV">Navarra (22)</option></optgroup><optgroup label="País Vasco"><option value="ALA">Álava (15)</option><option value="BIZ">Bizkaia (31)</option><option value="GIP">Gipuzkoa (28)</option></optgroup><optgroup label="La Rioja"><option value="RIO">La Rioja (13)</option></optgroup><optgroup label="Ceuta y Melilla"><option value="CEU">Ceuta (11)</option><option value="MEL">Melilla (6)</option></optgroup></select>
@@ -408,6 +424,7 @@ body.intro-on { overflow: hidden; }
       <div class="stat"><dt id="s-plz-t">Plazas en España</dt><dd id="s-plz">1.056</dd><small id="s-plz2">971 generales · 85 cupo</small></div>
       <div class="stat"><dt id="s-c-t">Corte Murcia</dt><dd id="s-c">–</dd><small id="s-c2"></small></div>
     </dl>
+    <a class="cver" href="#cortes">Ver el corte de cada provincia ›</a>
     <p class="desn" id="s-d">Plazas C1 que quedaron desiertas en toda España en el macroconcurso 2026: 912. Es solo un dato informativo: no cambia las plazas ni el orden de la clasificación.</p>
   </div>
 </section>
@@ -421,10 +438,20 @@ body.intro-on { overflow: hidden; }
     <h2 id="guia-t">Cómo apuntarte o cambiar tus datos</h2>
     <ol>
       <li><span><b>Busca tu nombre</b> en el buscador de arriba: escribe tu apellido y pulsa sobre tu nombre.</span></li>
-      <li><span><b>Elige tus provincias por orden de preferencia</b> (hasta 8) y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM. Si incluyes Madrid, también puedes marcar tus zonas.</span></li>
+      <li><span><b>Elige tus provincias por orden de preferencia</b> (puedes añadir todas) y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM. Si incluyes Madrid, también puedes marcar tus zonas.</span></li>
       <li><span><b>Escribe los 4 números de tu DNI</b> tal como aparecen en el listado oficial (si pone ***1234**, escribe 1234) y pulsa «Añadirme». Si ya estabas apuntado, pulsa «Guardar preferencias».</span></li>
     </ol>
     <p><b>Cómo se reparte:</b> se va por orden de nota. A cada persona se le asigna su primera provincia que todavía tenga plazas libres; si en esa ya no entra, pasa a la siguiente de su lista, y así hasta que entra en una. Puedes cambiar tus provincias cuando quieras.</p>
+  </section>
+  <section class="cortes" id="cortes" aria-labelledby="cortes-t">
+    <div class="sec-head">
+      <h2 id="cortes-t">Corte por provincia</h2>
+      <p class="sec-sub">Provisional, con las personas que han elegido destino. Pulsa una provincia para ver su lista.</p>
+    </div>
+    <div class="ctab-w"><table class="ctab">
+      <thead><tr><th scope="col">Provincia</th><th scope="col">Plazas</th><th scope="col">Asignados</th><th scope="col">Corte</th></tr></thead>
+      <tbody id="ctab"></tbody>
+    </table></div>
   </section>
   <div class="sec-head">
     <h2>Clasificación</h2>
@@ -441,7 +468,7 @@ body.intro-on { overflow: hidden; }
       <li><b>Fallos de la 2ª parte</b>: menos fallos, primero.</li>
       <li><b>Orden alfabético</b> contando desde la U: U, V, W, X, Y, Z, A, B… hasta la T.</li>
     </ol>
-    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona elige hasta 8 provincias por orden. Por orden de nota, a cada uno se le asigna la primera de sus provincias que aún tenga plazas; si no entra, pasa a la siguiente. Las plazas son las de la convocatoria de septiembre de 2025 (entre paréntesis en el selector). En verde, los que entran en la provincia que estás viendo; en gris, quienes la pidieron pero entran en otra o no caben. La nota de corte es la del último que entra; mientras no se llenen las plazas, es provisional.</p>
+    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona elige sus provincias por orden (puede añadir todas). Por orden de nota, a cada uno se le asigna la primera de sus provincias que aún tenga plazas; si no entra, pasa a la siguiente. Las plazas son las de la convocatoria de septiembre de 2025 (entre paréntesis en el selector). En verde, los que entran en la provincia que estás viendo; en gris, quienes la pidieron pero entran en otra o no caben. La nota de corte es la del último que entra; mientras no se llenen las plazas, es provisional.</p>
   </details>
   <div class="tools">
     <div class="fwrap find">
@@ -557,6 +584,22 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     provFiltro = p;
     var fp = document.getElementById('fprov'); if (fp) fp.value = p;
   }
+  function pintaCortes() {
+    var tb = $('ctab'); if (!tb) return; tb.textContent = '';
+    [].forEach.call($('fprov').querySelectorAll('optgroup'), function (g) {
+      var hr = el('tr', 'cgrp'); var th = el('th', null, g.label); th.colSpan = 4; th.scope = 'colgroup'; hr.append(th); tb.append(hr);
+      [].forEach.call(g.querySelectorAll('option'), function (o) {
+        var p = o.value, n = CAS.cnt[p] || 0, np = PLAZAS_P[p], tr = el('tr', 'crow' + (p === provFiltro ? ' sel' : ''));
+        var b = el('button', null, PROVS[p]); b.type = 'button';
+        b.addEventListener('click', function () { provTocado = true; setProv(p); render(); $('lista').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' }); });
+        var c0 = el('td'); c0.append(b); tr.append(c0);
+        tr.append(el('td', 'num', String(np)));
+        var ca = el('td', 'num', String(n)); if (n >= np) ca.append(el('small', 'llena', 'completa')); tr.append(ca);
+        tr.append(el('td', 'num cc', n ? nf.format(CAS.ult[p]) : '–'));
+        tb.append(tr);
+      });
+    });
+  }
   function pintaYo(rows) {
     var box = $('yo');
     if (yo == null || !members.has(yo)) { box.hidden = true; return; }
@@ -577,7 +620,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   }
   function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false, zona: '', ops: [] }; }
   function opsDe(s, prov) {
-    var vistas = {}, l = String(s || '').split(',').filter(function (x) { if (!PROVS[x] || vistas[x]) return false; vistas[x] = true; return true; }).slice(0, 8);
+    var vistas = {}, l = String(s || '').split(',').filter(function (x) { if (!PROVS[x] || vistas[x]) return false; vistas[x] = true; return true; });
     if (!l.length && PROVS[prov]) l = [prov];
     return l;
   }
@@ -683,6 +726,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       $('s-c').textContent = n0 ? nf.format(CAS.ult[p0]) : '–';
       $('s-c2').textContent = !n0 ? 'Nadie asignado todavía' : (n0 >= np ? 'Plazas completas' : 'Provisional · ' + n0 + ' de ' + np + ' plazas');
     })();
+    pintaCortes();
     pintaYo(rows);
     var vac = $('vacio');
     vac.hidden = rows.length > 0;
@@ -834,8 +878,8 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     });
     ol.hidden = !selOps.length;
     $('sem-l').hidden = !(curR && selOps.length);
-    var sel = $('ops-add'); sel.disabled = selOps.length >= 8;
-    sel.options[0].textContent = selOps.length >= 8 ? 'Ya tienes 8 provincias' : (selOps.length ? '+ Añadir otra provincia…' : '+ Añadir provincia…');
+    var sel = $('ops-add'); sel.disabled = selOps.length >= Object.keys(PROVS).length;
+    sel.options[0].textContent = selOps.length >= Object.keys(PROVS).length ? 'Ya tienes todas las provincias' : (selOps.length ? '+ Añadir otra provincia…' : '+ Añadir provincia…');
     [].forEach.call(sel.querySelectorAll('option[value]'), function (o) { if (o.value) o.disabled = selOps.indexOf(o.value) >= 0; });
     var w = $('alt-w'), show = false;
     if (curR && selOps.length) {
@@ -864,7 +908,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   });
   $('ops-add').addEventListener('change', function () {
     var v = $('ops-add').value; $('ops-add').value = '';
-    if (v && selOps.indexOf(v) < 0 && selOps.length < 8) { selOps.push(v); paintPrefs(); }
+    if (v && selOps.indexOf(v) < 0) { selOps.push(v); paintPrefs(); }
   });
   document.querySelectorAll('.po').forEach(function (b) {
     b.addEventListener('click', function () { selPref = selPref === b.dataset.p ? '' : b.dataset.p; paintPrefs(); });
