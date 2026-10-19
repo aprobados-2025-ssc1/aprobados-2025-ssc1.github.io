@@ -105,6 +105,10 @@ mark { background: none; color: inherit; text-decoration: underline; text-decora
 .go { border: 0; cursor: pointer; justify-self: start; display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.25rem; border-radius: 12px; background: var(--lime); color: var(--on-lime); font-weight: 700; text-decoration: none; }
 .go:disabled { opacity: .6; cursor: default; }
 .go:focus-visible, .cx:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.cdel { justify-self: start; min-height: 2.5rem; padding: 0 1rem; border: 1px solid #D63A2F; border-radius: 12px; background: transparent; color: #D63A2F; font: inherit; font-weight: 700; font-size: .875rem; cursor: pointer; }
+.cdel:hover { background: rgba(214, 58, 47, .08); }
+.cdel:focus-visible { outline: 3px solid #D63A2F; outline-offset: 2px; }
+.cdel:disabled { opacity: .6; cursor: default; }
 .cx { justify-self: start; background: none; border: 0; padding: .2rem 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: .875rem; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .6rem; margin: 1.6rem 0 0; }
 .stat { background: rgba(255, 255, 255, .08); border-radius: 14px; padding: .8rem .9rem; min-width: 0; }
@@ -423,6 +427,7 @@ body.intro-on { overflow: hidden; }
         </div>
         <button id="c-go" class="go" type="button">Añadirme a la clasificación</button>
         <button id="c-save" class="go" type="button" hidden>Guardar destino preferido</button>
+        <button id="c-del" class="cdel" type="button" hidden>Borrar mis datos</button>
         <button id="c-x" class="cx" type="button">Elegir otro nombre</button>
       </div>
     </div>
@@ -837,17 +842,27 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     $('c-dni').value = '';
     var mm0 = infoDe(r.k); selPref = mm0.pref; selOps = members.has(r.k) ? mm0.ops.slice() : []; selProv = selOps[0] || ''; selAlt = mm0.alt; selZona = (enProv(mm0, 'MAD') && mm0.zona) ? mm0.zona.split(',') : []; curR = r; paintPrefs();
     var save = $('c-save'); save.hidden = true;
+    var del = $('c-del'); del.hidden = true; del.disabled = false; del.dataset.ok = ''; del.textContent = 'Borrar mis datos';
     if (members.has(r.k)) {
       var pos = ranked().findIndex(function (x) { return x.k === r.k; }) + 1;
       $('c-sub').textContent = 'Nota ' + nf.format(r.T) + ' · Ya estás apuntado (puesto ' + pos + ' general). Con tus preferencias entrarías en ' + txtAsig(CAS.res.get(r.k)) + '. Para cambiarlas, escribe los 4 números de tu DNI y pulsa «Guardar preferencias».';
       go.hidden = true; save.hidden = false; save.disabled = false; save.textContent = 'Guardar preferencias';
       save.onclick = function () {
+        if (!selOps.length) { toast('Añade al menos una provincia.', 'err'); return; }
         var dv = dniVal(); if (!dv) return;
         save.disabled = true; save.textContent = 'Guardando…';
-        if (!selOps.length) { toast('Añade al menos una provincia.', 'err'); return; }
         api('POST', { accion: 'pref', k: r.k, dni: dv, pref: selPref, prov: selOps[0], ops: selOps, alt: false, zona: selOps.indexOf('MAD') >= 0 ? selZona.join(',') : '' })
           .then(function (st) { $('conf').hidden = true; setYo(r.k); setMembers(st); var a1 = CAS.res.get(r.k); setProv(a1 && a1.d ? a1.d : selOps[0]); render(); toast('Guardado · entrarías en ' + txtAsig(a1)); })
           .catch(function (e) { save.disabled = false; save.textContent = 'Guardar preferencias'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo guardar. Inténtalo de nuevo.', 'err'); });
+      };
+      del.hidden = false;
+      del.onclick = function () {
+        var dv = dniVal(); if (!dv) return;
+        if (!del.dataset.ok) { del.dataset.ok = '1'; del.textContent = 'Pulsa otra vez para borrar tus datos'; return; }
+        del.disabled = true; del.textContent = 'Borrando…';
+        api('POST', { accion: 'borrar', k: r.k, dni: dv })
+          .then(function (st) { $('conf').hidden = true; if (yo === r.k) setYo(null); setMembers(st); render(); toast('Tus datos se han borrado. Ya no apareces con destino elegido.'); })
+          .catch(function (e) { del.disabled = false; del.dataset.ok = ''; del.textContent = 'Borrar mis datos'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo borrar. Inténtalo de nuevo.', 'err'); });
       };
     } else {
       $('c-sub').textContent = 'Nota ' + nf.format(r.T) + (r.c ? ' · Cupo reserva' : '') + ' · Para añadirte, elige tus provincias por orden y escribe los 4 números de tu DNI.';
