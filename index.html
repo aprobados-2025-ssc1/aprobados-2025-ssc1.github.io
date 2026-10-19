@@ -181,6 +181,7 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .ops .pn .sem { display: flex; margin-top: .15rem; }
 .sem i { width: .65rem; height: .65rem; border-radius: 50%; flex: none; }
 .sem.v i { background: #2E9E44; } .sem.a i { background: #E8A317; } .sem.r i { background: #D63A2F; }
+.desn { margin: .8rem 0 0; font-size: .8125rem; line-height: 1.45; color: var(--hero-muted); }
 .seml { margin: 0 0 .5rem; font-size: .75rem; line-height: 1.5; color: var(--muted); }
 .seml .sem { margin-right: .3rem; }
 .ops .ac { display: inline-flex; gap: .2rem; }
@@ -406,8 +407,8 @@ body.intro-on { overflow: hidden; }
       <div class="stat"><dt>Han elegido destino</dt><dd id="s-n">0</dd><small id="s-n2"></small></div>
       <div class="stat"><dt id="s-plz-t">Plazas en España</dt><dd id="s-plz">1.056</dd><small id="s-plz2">971 generales · 85 cupo</small></div>
       <div class="stat"><dt id="s-c-t">Corte Murcia</dt><dd id="s-c">–</dd><small id="s-c2"></small></div>
-      <div class="stat"><dt id="s-d-t">Desiertas C1</dt><dd id="s-d">912</dd><small id="s-d2">macroconcurso 2026 (BOE 15/10/2026)</small></div>
     </dl>
+    <p class="desn" id="s-d">Plazas C1 que quedaron desiertas en toda España en el macroconcurso 2026: 912. Es solo un dato informativo: no cambia las plazas ni el orden de la clasificación.</p>
   </div>
 </section>
 
@@ -672,13 +673,13 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
         DATA.forEach(function (x) { if (x.c) minC = Math.min(minC, x.T); else minG = Math.min(minG, x.T); });
         $('s-plz-t').textContent = 'Plazas en España'; $('s-plz').textContent = '1.056'; $('s-plz2').textContent = '971 generales · 85 cupo (convocatoria 31/12/2025)';
         $('s-c-t').textContent = 'Corte España'; $('s-c').textContent = nf.format(minG); $('s-c2').textContent = 'Turno general · cupo: ' + nf.format(minC);
-        $('s-d-t').textContent = 'Desiertas C1 España'; $('s-d').textContent = '912'; $('s-d2').textContent = 'plazas libres tras el macroconcurso 2026';
+        $('s-d').textContent = 'Plazas C1 que quedaron desiertas en toda España en el macroconcurso 2026: 912. Es solo un dato informativo: no cambia las plazas ni el orden de la clasificación.';
         return;
       }
       var p0 = provFiltro, n0 = CAS.cnt[p0] || 0, np = PLAZAS_P[p0];
       $('s-plz-t').textContent = 'Plazas ' + PROVS[p0]; $('s-plz').textContent = String(np); $('s-plz2').textContent = 'plazas del año pasado (sept. 2025)';
       $('s-c-t').textContent = 'Corte ' + PROVS[p0];
-      $('s-d-t').textContent = 'Desiertas C1 ' + PROVS[p0]; $('s-d').textContent = String(DES_C1[p0] || 0); $('s-d2').textContent = 'plazas libres tras el macroconcurso 2026';
+      var nd = DES_C1[p0] || 0; $('s-d').textContent = 'Plazas C1 que quedaron desiertas en ' + PROVS[p0] + ' en el macroconcurso 2026: ' + nd + '. Es solo un dato informativo: no cambia las plazas ni el orden de la clasificación.';
       $('s-c').textContent = n0 ? nf.format(CAS.ult[p0]) : '–';
       $('s-c2').textContent = !n0 ? 'Nadie asignado todavía' : (n0 >= np ? 'Plazas completas' : 'Provisional · ' + n0 + ' de ' + np + ' plazas');
     })();
