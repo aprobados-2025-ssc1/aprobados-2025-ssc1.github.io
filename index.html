@@ -396,7 +396,7 @@ body.intro-on { overflow: hidden; }
       </div>
     </div>
     <dl class="stats">
-      <div class="stat"><dt>En el listado</dt><dd id="s-n">0</dd></div>
+      <div class="stat"><dt>Apuntados</dt><dd id="s-n">0</dd><small id="s-n2"></small></div>
       <div class="stat"><dt id="s-plz-t">Plazas Murcia</dt><dd id="s-plz">35</dd><small>estimación orientativa</small></div>
       <div class="stat"><dt id="s-c-t">Corte Murcia</dt><dd id="s-c">–</dd><small id="s-c2"></small></div>
     </dl>
@@ -572,7 +572,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     return l;
   }
   /* Reparto en cascada: por orden de nota, cada uno entra en su primera provincia con plazas libres. */
-  var CAS = { res: new Map(), cnt: {}, ult: {} };
+  var CAS = { res: new Map(), cnt: {}, ult: {} }, ALL = null;
   function cascada(extra) {
     var res = new Map(), cnt = {}, ult = {};
     Object.keys(PROVS).forEach(function (p) { cnt[p] = 0; });
@@ -644,7 +644,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function render() {
     var rows = ranked(), list = $('lista');
     list.textContent = '';
-    $('s-n').textContent = String(rows.length);
+    $('s-n').textContent = String(rows.length); $('s-n2').textContent = 'de ' + DATA.length + ' aprobados';
+    var todos = !provFiltro && !prefFiltro;
+    if (!ALL) ALL = DATA.slice().sort(function (a, b) { return compare(a, b).c; });
+    var lista = todos ? ALL : rows;
     if (rows.length) {
     }
     (function () {
@@ -665,19 +668,21 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var compacta = vista === 'c';
     list.className = 'rank' + (compacta ? ' compacta' : '');
     var shown = 0, grupo = 0, filtrando = filtro.length || prefFiltro || provFiltro, cortePuesto = false;
-    if (compacta && rows.length) {
+    if (compacta && lista.length) {
       var hd = el('li', 'fila head'); hd.setAttribute('aria-hidden', 'true');
       ['Nº', 'Nombre', '1ª parte', '2ª parte', 'Total'].forEach(function (h, j) { hd.append(el('span', j === 0 ? 'fh' : (j === 1 ? 'fn' : (j === 4 ? 'ft' : 'fv')), h)); });
       list.append(hd);
     }
-    rows.forEach(function (r, i) {
+    lista.forEach(function (r, i) {
       var mm = infoDe(r.k), pr = mm.pref, a = CAS.res.get(r.k) || { d: null, oi: -1, pos: null };
       var aqui = provFiltro ? a.d === provFiltro : !!a.d;
-      var esTop = aqui, otra = provFiltro && !aqui;
+      var apuntado = members.has(r.k);
+      var esTop = aqui, otra = (provFiltro && !aqui) || !apuntado;
       var posV = provFiltro ? (aqui ? a.pos : '–') : i + 1;
-      var etq = a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza';
+      var etq = !apuntado ? 'No apuntado' : (a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza');
       var nota2 = '';
-      if (otra) { var ip = mm.ops.indexOf(provFiltro); nota2 = (a.d && a.oi < ip) ? 'Se va a ' + PROVS[a.d] + ' (' + (a.oi + 1) + 'ª opción)' : (a.d ? 'No entra · va a ' + PROVS[a.d] : 'No entra en sus opciones'); }
+      if (!apuntado) nota2 = 'No apuntado';
+      else if (otra) { var ip = mm.ops.indexOf(provFiltro); nota2 = (a.d && a.oi < ip) ? 'Se va a ' + PROVS[a.d] + ' (' + (a.oi + 1) + 'ª opción)' : (a.d ? 'No entra · va a ' + PROVS[a.d] : 'No entra en sus opciones'); }
       var match = (!provFiltro || enProv(mm, provFiltro)) && (!zonaFiltro || provFiltro !== 'MAD' || (mm.zona || '').split(',').indexOf(zonaFiltro) >= 0) && (!filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); })) && (!prefFiltro || (prefFiltro === 'none' ? !pr : pr === prefFiltro));
       if (pr && prefFiltro === pr) grupo++;
       if (match && provFiltro && !filtro.length && !prefFiltro && !zonaFiltro && !cortePuesto && (CAS.cnt[provFiltro] || 0) >= PLAZAS_P[provFiltro] && otra && !(a.d && a.oi < mm.ops.indexOf(provFiltro))) { cortePuesto = true; var cut0 = el('li', 'corte', 'Corte · ' + PLAZAS_P[provFiltro] + ' plazas en ' + PROVS[provFiltro]); cut0.setAttribute('role', 'separator'); list.append(cut0); }
@@ -702,7 +707,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
           if (pr) who.append(el('span', 'badge pref', PREFS[pr]));
           who.append(el('span', 'badge ' + (a.d ? 'dest' : 'fuera'), otra ? nota2 : (a.d ? 'Entra en ' + etq : 'Sin plaza en sus opciones')));
           if (enProv(mm, 'MAD') && mm.zona) who.append(el('span', 'badge zona', 'Zona: ' + zonaTxt(mm.zona)));
-          who.append(el('span', 'tb', 'Preferencias: ' + mm.ops.map(function (p, j) { return (j + 1) + '. ' + PROVS[p]; }).join(' · ')));
+          if (apuntado) who.append(el('span', 'tb', 'Preferencias: ' + mm.ops.map(function (p, j) { return (j + 1) + '. ' + PROVS[p]; }).join(' · ')));
           if (prefFiltro && prefFiltro !== 'none') who.append(el('span', 'tb', grupo + 'º entre quienes prefieren ' + PREFS[prefFiltro]));
           if (i > 0) {
             var c = compare(rows[i - 1], r);
@@ -724,7 +729,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var fc = $('fcount');
     if (filtrando && rows.length) {
       fc.hidden = false;
-      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' han pedido ' + PROVS[provFiltro] + ' · el número es su puesto entre quienes entran' : ' · el número es su puesto en la clasificación general') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
+      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' han pedido ' + PROVS[provFiltro] + ' · el número es su puesto entre quienes entran' : ' · el número es su puesto en la clasificación general de todos los aprobados (en gris, los que aún no se han apuntado)') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
       if (!shown && compacta) list.textContent = '';
     } else fc.hidden = true;
     if (justAdded != null) {
