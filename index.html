@@ -396,7 +396,7 @@ body.intro-on { overflow: hidden; }
       </div>
     </div>
     <dl class="stats">
-      <div class="stat"><dt>Apuntados</dt><dd id="s-n">0</dd><small id="s-n2"></small></div>
+      <div class="stat"><dt>Han elegido destino</dt><dd id="s-n">0</dd><small id="s-n2"></small></div>
       <div class="stat"><dt id="s-plz-t">Plazas en España</dt><dd id="s-plz">1.056</dd><small id="s-plz2">971 generales · 85 cupo</small></div>
       <div class="stat"><dt id="s-c-t">Corte Murcia</dt><dd id="s-c">–</dd><small id="s-c2"></small></div>
     </dl>
@@ -686,9 +686,9 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       var apuntado = members.has(r.k);
       var esTop = aqui, otra = (provFiltro && !aqui) || !apuntado;
       var posV = provFiltro ? (aqui ? a.pos : '–') : i + 1;
-      var etq = !apuntado ? 'No apuntado' : (a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza');
+      var etq = !apuntado ? 'Sin destino elegido' : (a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza');
       var nota2 = '';
-      if (!apuntado) nota2 = 'No apuntado';
+      if (!apuntado) nota2 = 'Sin destino elegido';
       else if (otra) { var ip = mm.ops.indexOf(provFiltro); nota2 = (a.d && a.oi < ip) ? 'Se va a ' + PROVS[a.d] + ' (' + (a.oi + 1) + 'ª opción)' : (a.d ? 'No entra · va a ' + PROVS[a.d] : 'No entra en sus opciones'); }
       var match = (!provFiltro || enProv(mm, provFiltro)) && (!zonaFiltro || provFiltro !== 'MAD' || (mm.zona || '').split(',').indexOf(zonaFiltro) >= 0) && (!filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); })) && (!prefFiltro || (prefFiltro === 'none' ? !pr : pr === prefFiltro));
       if (pr && prefFiltro === pr) grupo++;
@@ -736,7 +736,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var fc = $('fcount');
     if (filtrando && rows.length) {
       fc.hidden = false;
-      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' han pedido ' + PROVS[provFiltro] + ' · el número es su puesto entre quienes entran' : ' · el número es su puesto en la clasificación general de todos los aprobados (en gris, los que aún no se han apuntado)') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
+      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' han pedido ' + PROVS[provFiltro] + ' · el número es su puesto entre quienes entran' : ' · el número es su puesto en la clasificación general de todos los aprobados (en gris, los que aún no han elegido destino)') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
       if (!shown && compacta) list.textContent = '';
     } else fc.hidden = true;
     if (justAdded != null) {
