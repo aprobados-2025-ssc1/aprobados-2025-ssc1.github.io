@@ -172,6 +172,20 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .pfil-l { font-size: .8125rem; font-weight: 700; color: var(--muted); margin-right: .2rem; }
 .alt { margin: 0; padding: .55rem .7rem; border-radius: 10px; background: var(--soft); font-size: .8125rem; line-height: 1.4; color: var(--ink); }
 .badge.prov { background: transparent; }
+.ops { list-style: none; margin: .4rem 0 .5rem; padding: 0; display: grid; gap: .35rem; }
+.ops li { display: grid; grid-template-columns: 1.7rem minmax(0, 1fr) auto; align-items: center; gap: .5rem; padding: .35rem .45rem .35rem .4rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.ops .n { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--lime); color: var(--on-lime); font: 800 .8125rem var(--f-display); }
+.ops .pn { min-width: 0; font-weight: 700; font-size: .9375rem; overflow-wrap: anywhere; }
+.ops .pn small { font-weight: 500; color: var(--muted); }
+.ops .ac { display: inline-flex; gap: .2rem; }
+.ops .ac button { width: 2rem; height: 2rem; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); cursor: pointer; font-size: .875rem; }
+.ops .ac button:disabled { opacity: .35; cursor: default; }
+.ops .ac button:focus-visible, .selp:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.selp { width: 100%; max-width: 26rem; height: 2.75rem; padding: 0 .75rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); font: inherit; font-size: .9375rem; }
+.pfil .selp { flex: 1 1 14rem; }
+.fila.otra, .card.otra { opacity: .55; }
+.badge.dest { background: rgba(149, 193, 31, .18); border-color: rgba(149, 193, 31, .55); }
+.badge.fuera { background: transparent; border-style: dashed; }
 .cg { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .3rem; padding: .2rem .35rem .2rem .55rem; border: 1px dashed var(--line); border-radius: 18px; }
 .cg-l { font-size: .625rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-left: .15rem; }
 .badge.zona { background: transparent; border-style: dashed; }
@@ -329,9 +343,9 @@ body.intro-on { overflow: hidden; }
 
 <section class="hero-wrap wrap">
   <div class="hero">
-    <p class="eyebrow">Murcia · Alicante · Valencia · Madrid · Andalucía · Albacete · Zaragoza</p>
+    <p class="eyebrow">Todas las provincias · Turno general y reserva</p>
     <h1>Aprobados SSC1 2025</h1>
-    <p class="lead">Escribe tus apellidos y elige tu nombre. Indica tu provincia, escribe los 4 números de tu DNI del listado oficial y pulsa «Añadirme». ¿Ya estás inscrito? Haz lo mismo para cambiar de provincia o de destino.</p>
+    <p class="lead">Busca tu nombre, elige hasta 8 provincias por orden de preferencia, escribe los 4 números de tu DNI del listado oficial y pulsa «Añadirme». Verás en qué provincia entrarías según tu nota.</p>
     <div class="combo">
       <label for="q">Busca tu nombre</label>
       <div class="fwrap">
@@ -343,15 +357,9 @@ body.intro-on { overflow: hidden; }
       <div id="conf" class="conf" hidden>
         <div class="conf-who"><b id="c-nm"></b><span id="c-sub"></span></div>
         <div class="prefs">
-          <span class="pref-l" id="prov-l">Provincia preferida</span>
-          <div class="pref-opts" role="group" aria-labelledby="prov-l">
-            <div class="cg"><span class="cg-l">Región de Murcia</span><button type="button" class="pv" data-v="MUR" aria-pressed="false">Murcia</button></div>
-            <div class="cg"><span class="cg-l">Comunidad Valenciana</span><button type="button" class="pv" data-v="ALI" aria-pressed="false">Alicante</button><button type="button" class="pv" data-v="VAL" aria-pressed="false">Valencia</button></div>
-            <div class="cg"><span class="cg-l">Comunidad de Madrid</span><button type="button" class="pv" data-v="MAD" aria-pressed="false">Madrid</button></div>
-            <div class="cg"><span class="cg-l">Andalucía</span><button type="button" class="pv" data-v="ALM" aria-pressed="false">Almería</button><button type="button" class="pv" data-v="COR" aria-pressed="false">Córdoba</button><button type="button" class="pv" data-v="MAL" aria-pressed="false">Málaga</button><button type="button" class="pv" data-v="SEV" aria-pressed="false">Sevilla</button></div>
-            <div class="cg"><span class="cg-l">Castilla-La Mancha</span><button type="button" class="pv" data-v="ALB" aria-pressed="false">Albacete</button></div>
-            <div class="cg"><span class="cg-l">Aragón</span><button type="button" class="pv" data-v="ZAR" aria-pressed="false">Zaragoza</button></div>
-          </div>
+          <span class="pref-l" id="prov-l">Tus provincias por orden de preferencia <small>(hasta 8)</small></span>
+          <ol id="ops-list" class="ops" aria-labelledby="prov-l"></ol>
+          <select id="ops-add" class="field selp" aria-label="Añadir provincia a tus preferencias"><option value="">+ Añadir provincia…</option><optgroup label="Andalucía"><option value="ALM">Almería (20)</option><option value="CAD">Cádiz (28)</option><option value="COR">Córdoba (15)</option><option value="GRA">Granada (12)</option><option value="HUE">Huelva (15)</option><option value="JAE">Jaén (11)</option><option value="MAL">Málaga (22)</option><option value="SEV">Sevilla (42)</option></optgroup><optgroup label="Aragón"><option value="HUS">Huesca (15)</option><option value="TER">Teruel (8)</option><option value="ZAR">Zaragoza (28)</option></optgroup><optgroup label="Principado de Asturias"><option value="AST">Asturias (14)</option></optgroup><optgroup label="Illes Balears"><option value="BAL">Illes Balears (38)</option></optgroup><optgroup label="Canarias"><option value="LPA">Las Palmas (20)</option><option value="TFE">Santa Cruz de Tenerife (26)</option></optgroup><optgroup label="Cantabria"><option value="CAN">Cantabria (17)</option></optgroup><optgroup label="Castilla y León"><option value="AVI">Ávila (13)</option><option value="BUR">Burgos (17)</option><option value="LEO">León (5)</option><option value="PAL">Palencia (11)</option><option value="SAL">Salamanca (13)</option><option value="SEG">Segovia (10)</option><option value="SOR">Soria (7)</option><option value="VLL">Valladolid (16)</option><option value="ZAM">Zamora (9)</option></optgroup><optgroup label="Castilla-La Mancha"><option value="ALB">Albacete (9)</option><option value="CRE">Ciudad Real (13)</option><option value="CUE">Cuenca (11)</option><option value="GUA">Guadalajara (13)</option><option value="TOL">Toledo (18)</option></optgroup><optgroup label="Cataluña"><option value="BAR">Barcelona (99)</option><option value="GIR">Girona (26)</option><option value="LLE">Lleida (21)</option><option value="TAR">Tarragona (27)</option></optgroup><optgroup label="Comunidad Valenciana"><option value="ALI">Alicante (34)</option><option value="CAS">Castellón (19)</option><option value="VAL">Valencia (53)</option></optgroup><optgroup label="Extremadura"><option value="BAD">Badajoz (16)</option><option value="CAC">Cáceres (16)</option></optgroup><optgroup label="Galicia"><option value="ACO">A Coruña (26)</option><option value="LUG">Lugo (8)</option><option value="OUR">Ourense (1)</option><option value="PON">Pontevedra (22)</option></optgroup><optgroup label="Comunidad de Madrid"><option value="MAD">Madrid (228)</option></optgroup><optgroup label="Región de Murcia"><option value="MUR">Murcia (32)</option></optgroup><optgroup label="Comunidad Foral de Navarra"><option value="NAV">Navarra (22)</option></optgroup><optgroup label="País Vasco"><option value="ALA">Álava (15)</option><option value="BIZ">Bizkaia (31)</option><option value="GIP">Gipuzkoa (28)</option></optgroup><optgroup label="La Rioja"><option value="RIO">La Rioja (13)</option></optgroup><optgroup label="Ceuta y Melilla"><option value="CEU">Ceuta (11)</option><option value="MEL">Melilla (6)</option></optgroup></select>
           <p class="alt" id="alt-w" hidden><span id="alt-s"></span></p>
         </div>
         <div class="prefs">
@@ -404,10 +412,10 @@ body.intro-on { overflow: hidden; }
     <h2 id="guia-t">Cómo apuntarte o cambiar tus datos</h2>
     <ol>
       <li><span><b>Busca tu nombre</b> en el buscador de arriba: escribe tu apellido y pulsa sobre tu nombre.</span></li>
-      <li><span><b>Elige tu provincia</b> y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM. Si eliges Madrid, también puedes marcar tus zonas (Sur, Norte, Centro…).</span></li>
+      <li><span><b>Elige tus provincias por orden de preferencia</b> (hasta 8) y, si quieres, tu destino preferido: CAISS, INSS, Tesorería (TGSS) o ISM. Si incluyes Madrid, también puedes marcar tus zonas.</span></li>
       <li><span><b>Escribe los 4 números de tu DNI</b> tal como aparecen en el listado oficial (si pone ***1234**, escribe 1234) y pulsa «Añadirme». Si ya estabas apuntado, pulsa «Guardar preferencias».</span></li>
     </ol>
-    <p>Puedes repetirlo cuando quieras para cambiar de provincia o de destino. Cada persona está en una sola lista.</p>
+    <p><b>Cómo se reparte:</b> se va por orden de nota. A cada persona se le asigna su primera provincia que todavía tenga plazas libres; si en esa ya no entra, pasa a la siguiente de su lista, y así hasta que entra en una. Puedes cambiar tus provincias cuando quieras.</p>
   </section>
   <div class="sec-head">
     <h2>Clasificación</h2>
@@ -424,7 +432,7 @@ body.intro-on { overflow: hidden; }
       <li><b>Fallos de la 2ª parte</b>: menos fallos, primero.</li>
       <li><b>Orden alfabético</b> contando desde la U: U, V, W, X, Y, Z, A, B… hasta la T.</li>
     </ol>
-    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona está en una sola lista y puede cambiarse cuando quiera. En verde, los que entran dentro de las plazas estimadas de su provincia (Murcia, Alicante, Valencia y Zaragoza 35; Madrid 255; Sevilla 42; Almería y Málaga 20; Córdoba 15; Albacete 14): es una estimación orientativa de plazas, no una cifra oficial. La nota de corte de cada provincia es la del último puesto con plaza estimada entre los inscritos; mientras no haya tantos, se muestra la del último apuntado como provisional. Al filtrar por provincia, el número de cada fila es su puesto en esa provincia.</p>
+    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona elige hasta 8 provincias por orden. Por orden de nota, a cada uno se le asigna la primera de sus provincias que aún tenga plazas; si no entra, pasa a la siguiente. Las plazas son las de la convocatoria de septiembre de 2025 (entre paréntesis en el selector). En verde, los que entran en la provincia que estás viendo; en gris, quienes la pidieron pero entran en otra o no caben. La nota de corte es la del último que entra; mientras no se llenen las plazas, es provisional.</p>
   </details>
   <div class="tools">
     <div class="fwrap find">
@@ -437,14 +445,8 @@ body.intro-on { overflow: hidden; }
     </div>
   </div>
   <div class="pfil" role="group" aria-label="Filtrar por provincia">
-    <span class="pfil-l">Provincia:</span>
-    <button type="button" class="chip" data-v="" aria-pressed="false">Todas</button>
-    <div class="cg"><span class="cg-l">Región de Murcia</span><button type="button" class="chip" data-v="MUR" aria-pressed="true">Murcia</button></div>
-    <div class="cg"><span class="cg-l">Comunidad Valenciana</span><button type="button" class="chip" data-v="ALI" aria-pressed="false">Alicante</button><button type="button" class="chip" data-v="VAL" aria-pressed="false">Valencia</button></div>
-    <div class="cg"><span class="cg-l">Comunidad de Madrid</span><button type="button" class="chip" data-v="MAD" aria-pressed="false">Madrid</button></div>
-    <div class="cg"><span class="cg-l">Andalucía</span><button type="button" class="chip" data-v="ALM" aria-pressed="false">Almería</button><button type="button" class="chip" data-v="COR" aria-pressed="false">Córdoba</button><button type="button" class="chip" data-v="MAL" aria-pressed="false">Málaga</button><button type="button" class="chip" data-v="SEV" aria-pressed="false">Sevilla</button></div>
-    <div class="cg"><span class="cg-l">Castilla-La Mancha</span><button type="button" class="chip" data-v="ALB" aria-pressed="false">Albacete</button></div>
-    <div class="cg"><span class="cg-l">Aragón</span><button type="button" class="chip" data-v="ZAR" aria-pressed="false">Zaragoza</button></div>
+    <label class="pfil-l" for="fprov">Provincia:</label>
+    <select id="fprov" class="field selp"><option value="">Todas · clasificación general</option><optgroup label="Andalucía"><option value="ALM">Almería (20)</option><option value="CAD">Cádiz (28)</option><option value="COR">Córdoba (15)</option><option value="GRA">Granada (12)</option><option value="HUE">Huelva (15)</option><option value="JAE">Jaén (11)</option><option value="MAL">Málaga (22)</option><option value="SEV">Sevilla (42)</option></optgroup><optgroup label="Aragón"><option value="HUS">Huesca (15)</option><option value="TER">Teruel (8)</option><option value="ZAR">Zaragoza (28)</option></optgroup><optgroup label="Principado de Asturias"><option value="AST">Asturias (14)</option></optgroup><optgroup label="Illes Balears"><option value="BAL">Illes Balears (38)</option></optgroup><optgroup label="Canarias"><option value="LPA">Las Palmas (20)</option><option value="TFE">Santa Cruz de Tenerife (26)</option></optgroup><optgroup label="Cantabria"><option value="CAN">Cantabria (17)</option></optgroup><optgroup label="Castilla y León"><option value="AVI">Ávila (13)</option><option value="BUR">Burgos (17)</option><option value="LEO">León (5)</option><option value="PAL">Palencia (11)</option><option value="SAL">Salamanca (13)</option><option value="SEG">Segovia (10)</option><option value="SOR">Soria (7)</option><option value="VLL">Valladolid (16)</option><option value="ZAM">Zamora (9)</option></optgroup><optgroup label="Castilla-La Mancha"><option value="ALB">Albacete (9)</option><option value="CRE">Ciudad Real (13)</option><option value="CUE">Cuenca (11)</option><option value="GUA">Guadalajara (13)</option><option value="TOL">Toledo (18)</option></optgroup><optgroup label="Cataluña"><option value="BAR">Barcelona (99)</option><option value="GIR">Girona (26)</option><option value="LLE">Lleida (21)</option><option value="TAR">Tarragona (27)</option></optgroup><optgroup label="Comunidad Valenciana"><option value="ALI">Alicante (34)</option><option value="CAS">Castellón (19)</option><option value="VAL">Valencia (53)</option></optgroup><optgroup label="Extremadura"><option value="BAD">Badajoz (16)</option><option value="CAC">Cáceres (16)</option></optgroup><optgroup label="Galicia"><option value="ACO">A Coruña (26)</option><option value="LUG">Lugo (8)</option><option value="OUR">Ourense (1)</option><option value="PON">Pontevedra (22)</option></optgroup><optgroup label="Comunidad de Madrid"><option value="MAD">Madrid (228)</option></optgroup><optgroup label="Región de Murcia"><option value="MUR" selected>Murcia (32)</option></optgroup><optgroup label="Comunidad Foral de Navarra"><option value="NAV">Navarra (22)</option></optgroup><optgroup label="País Vasco"><option value="ALA">Álava (15)</option><option value="BIZ">Bizkaia (31)</option><option value="GIP">Gipuzkoa (28)</option></optgroup><optgroup label="La Rioja"><option value="RIO">La Rioja (13)</option></optgroup><optgroup label="Ceuta y Melilla"><option value="CEU">Ceuta (11)</option><option value="MEL">Melilla (6)</option></optgroup></select>
   </div>
   <div class="pfil" role="group" aria-label="Filtrar por destino preferido">
     <span class="pfil-l">Destino:</span>
@@ -528,8 +530,8 @@ function compare(a, b) {
   var nf = new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var PLAZAS = 35;
 var PREFS = { CAISS: 'CAISS', INSS: 'INSS', TGSS: 'Tesorería (TGSS)', ISM: 'ISM' };
-var PROVS = {"MUR": "Murcia", "ALI": "Alicante", "VAL": "Valencia", "MAD": "Madrid", "ALM": "Almería", "SEV": "Sevilla", "COR": "Córdoba", "MAL": "Málaga", "ALB": "Albacete", "ZAR": "Zaragoza"};
-var PLAZAS_P = {"MUR": 35, "ALI": 35, "VAL": 35, "MAD": 255, "ALM": 20, "SEV": 42, "COR": 15, "MAL": 20, "ALB": 14, "ZAR": 35};
+var PROVS = {"ALM": "Almería", "CAD": "Cádiz", "COR": "Córdoba", "GRA": "Granada", "HUE": "Huelva", "JAE": "Jaén", "MAL": "Málaga", "SEV": "Sevilla", "HUS": "Huesca", "TER": "Teruel", "ZAR": "Zaragoza", "AST": "Asturias", "BAL": "Illes Balears", "LPA": "Las Palmas", "TFE": "Santa Cruz de Tenerife", "CAN": "Cantabria", "AVI": "Ávila", "BUR": "Burgos", "LEO": "León", "PAL": "Palencia", "SAL": "Salamanca", "SEG": "Segovia", "SOR": "Soria", "VLL": "Valladolid", "ZAM": "Zamora", "ALB": "Albacete", "CRE": "Ciudad Real", "CUE": "Cuenca", "GUA": "Guadalajara", "TOL": "Toledo", "BAR": "Barcelona", "GIR": "Girona", "LLE": "Lleida", "TAR": "Tarragona", "ALI": "Alicante", "CAS": "Castellón", "VAL": "Valencia", "BAD": "Badajoz", "CAC": "Cáceres", "ACO": "A Coruña", "LUG": "Lugo", "OUR": "Ourense", "PON": "Pontevedra", "MAD": "Madrid", "MUR": "Murcia", "NAV": "Navarra", "ALA": "Álava", "BIZ": "Bizkaia", "GIP": "Gipuzkoa", "RIO": "La Rioja", "CEU": "Ceuta", "MEL": "Melilla"};
+var PLAZAS_P = {"ALM": 20, "CAD": 28, "COR": 15, "GRA": 12, "HUE": 15, "JAE": 11, "MAL": 22, "SEV": 42, "HUS": 15, "TER": 8, "ZAR": 28, "AST": 14, "BAL": 38, "LPA": 20, "TFE": 26, "CAN": 17, "AVI": 13, "BUR": 17, "LEO": 5, "PAL": 11, "SAL": 13, "SEG": 10, "SOR": 7, "VLL": 16, "ZAM": 9, "ALB": 9, "CRE": 13, "CUE": 11, "GUA": 13, "TOL": 18, "BAR": 99, "GIR": 26, "LLE": 21, "TAR": 27, "ALI": 34, "CAS": 19, "VAL": 53, "BAD": 16, "CAC": 16, "ACO": 26, "LUG": 8, "OUR": 1, "PON": 22, "MAD": 228, "MUR": 32, "NAV": 22, "ALA": 15, "BIZ": 31, "GIP": 28, "RIO": 13, "CEU": 11, "MEL": 6};
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c', prefFiltro = '', provFiltro = 'MUR', provTocado = false, yo = null;
@@ -543,14 +545,14 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     if (p !== 'MAD') setZona('');
     var zf = document.getElementById('zfil'); if (zf) zf.hidden = p !== 'MAD';
     provFiltro = p;
-    document.querySelectorAll('.chip[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.v === p)); });
+    var fp = document.getElementById('fprov'); if (fp) fp.value = p;
   }
   function pintaYo(rows) {
     var box = $('yo');
     if (yo == null || !members.has(yo)) { box.hidden = true; return; }
-    var r = DATA[yo], p = infoDe(yo).prov, pos = posEn(r, p), np = PLAZAS_P[p];
-    $('yo-p').textContent = pos + 'º en ' + PROVS[p];
-    $('yo-s').textContent = r.disp + ' · nota ' + nf.format(r.T) + ' · ' + (pos <= np ? 'dentro de las ' + np + ' plazas estimadas' : 'a ' + (pos - np) + (pos - np === 1 ? ' puesto' : ' puestos') + ' de las ' + np + ' plazas estimadas');
+    var r = DATA[yo], a = CAS.res.get(yo);
+    $('yo-p').textContent = a && a.d ? a.pos + 'º en ' + PROVS[a.d] : 'Sin plaza en tus opciones';
+    $('yo-s').textContent = r.disp + ' · nota ' + nf.format(r.T) + ' · ' + (a && a.d ? 'tu ' + (a.oi + 1) + 'ª opción · ' + PLAZAS_P[a.d] + ' plazas' : 'añade más provincias a tu lista');
     box.hidden = false;
   }
   var API = 'https://script.google.com/macros/s/AKfycbzDZR4HR3Ofpq0ZCcGlYAsd_eVonfMW-FaiA_vMKK5a9H_Dj_CIZRiTYO7UBnazGE4MZw/exec';
@@ -563,8 +565,27 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       return j;
     });
   }
-  function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false, zona: '' }; }
-  function enProv(mm, p) { return mm.prov === p; }
+  function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false, zona: '', ops: [] }; }
+  function opsDe(s, prov) {
+    var vistas = {}, l = String(s || '').split(',').filter(function (x) { if (!PROVS[x] || vistas[x]) return false; vistas[x] = true; return true; }).slice(0, 8);
+    if (!l.length && PROVS[prov]) l = [prov];
+    return l;
+  }
+  /* Reparto en cascada: por orden de nota, cada uno entra en su primera provincia con plazas libres. */
+  var CAS = { res: new Map(), cnt: {}, ult: {} };
+  function cascada(extra) {
+    var res = new Map(), cnt = {}, ult = {};
+    Object.keys(PROVS).forEach(function (p) { cnt[p] = 0; });
+    var ks = Array.from(members.keys()); if (extra && !members.has(extra.k)) ks.push(extra.k);
+    ks.map(function (k) { return DATA[k]; }).sort(function (a, b) { return compare(a, b).c; }).forEach(function (r) {
+      var ops = (extra && extra.k === r.k) ? extra.ops : infoDe(r.k).ops, d = null, oi = -1;
+      for (var i = 0; i < ops.length; i++) { if (cnt[ops[i]] < PLAZAS_P[ops[i]]) { d = ops[i]; oi = i; cnt[d]++; ult[d] = r.T; break; } }
+      res.set(r.k, { d: d, oi: oi, pos: d ? cnt[d] : null });
+    });
+    return { res: res, cnt: cnt, ult: ult };
+  }
+  function txtAsig(a) { return a && a.d ? PROVS[a.d] + ' (tu ' + (a.oi + 1) + 'ª opción, puesto ' + a.pos + ' de ' + PLAZAS_P[a.d] + ')' : 'ninguna de tus provincias: ya están llenas con notas más altas. Añade más provincias'; }
+  function enProv(mm, p) { return (mm.ops || []).indexOf(p) >= 0; }
   function posEn(r, p, mmSup) {
     var n = 1;
     members.forEach(function (mm, k) { if (k !== r.k && enProv(mm, p) && compare(DATA[k], r).c < 0) n++; });
@@ -573,10 +594,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function setMembers(resp) {
     var codes = Array.isArray(resp) ? resp : ((resp && resp.codigos) || []), prefs = (resp && resp.prefs) || {}, provs = (resp && resp.provs) || {}, alts = (resp && resp.alts) || {};
     var m = new Map();
-    codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false, zona: ((resp && resp.zonas) || {})[c] || '' }); });
-    members = m; loaded = true;
+    codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false, zona: ((resp && resp.zonas) || {})[c] || '', ops: opsDe(((resp && resp.ops) || {})[c], provs[c]) }); });
+    members = m; loaded = true; CAS = cascada();
     try { if (!resp.__cache) localStorage.setItem('estado', JSON.stringify({ t: Date.now(), r: resp })); } catch (e) {}
-    if (!provTocado && yo != null && m.has(yo)) setProv(m.get(yo).prov);
+    if (!provTocado && yo != null && m.has(yo)) { var ay = CAS.res.get(yo); setProv(ay && ay.d ? ay.d : m.get(yo).prov); }
     $('upd').textContent = 'actualizada a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     render();
   }
@@ -627,12 +648,12 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     if (rows.length) {
     }
     (function () {
-      var p0 = provFiltro || (yo != null && members.has(yo) ? infoDe(yo).prov : 'MUR');
-      var l = rows.filter(function (x) { return infoDe(x.k).prov === p0; }), np = PLAZAS_P[p0];
+      var ay = yo != null ? CAS.res.get(yo) : null;
+      var p0 = provFiltro || (ay && ay.d) || 'MUR', n0 = CAS.cnt[p0] || 0, np = PLAZAS_P[p0];
       $('s-plz-t').textContent = 'Plazas ' + PROVS[p0]; $('s-plz').textContent = String(np);
       $('s-c-t').textContent = 'Corte ' + PROVS[p0];
-      $('s-c').textContent = l.length ? nf.format(l[Math.min(np, l.length) - 1].T) : '–';
-      $('s-c2').textContent = !l.length ? 'Nadie apuntado todavía' : (l.length >= np ? 'Puesto ' + np : 'Provisional · ' + l.length + ' de ' + np + ' apuntados');
+      $('s-c').textContent = n0 ? nf.format(CAS.ult[p0]) : '–';
+      $('s-c2').textContent = !n0 ? 'Nadie asignado todavía' : (n0 >= np ? 'Plazas completas' : 'Provisional · ' + n0 + ' de ' + np + ' plazas');
     })();
     pintaYo(rows);
     var vac = $('vacio');
@@ -643,42 +664,45 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     }
     var compacta = vista === 'c';
     list.className = 'rank' + (compacta ? ' compacta' : '');
-    var shown = 0, grupo = 0, filtrando = filtro.length || prefFiltro || provFiltro, cnt = {}, tot = {};
-    Object.keys(PROVS).forEach(function (p) { cnt[p] = 0; tot[p] = 0; });
-    rows.forEach(function (x) { tot[infoDe(x.k).prov]++; });
+    var shown = 0, grupo = 0, filtrando = filtro.length || prefFiltro || provFiltro, cortePuesto = false;
     if (compacta && rows.length) {
       var hd = el('li', 'fila head'); hd.setAttribute('aria-hidden', 'true');
       ['Nº', 'Nombre', '1ª parte', '2ª parte', 'Total'].forEach(function (h, j) { hd.append(el('span', j === 0 ? 'fh' : (j === 1 ? 'fn' : (j === 4 ? 'ft' : 'fv')), h)); });
       list.append(hd);
     }
     rows.forEach(function (r, i) {
-      var mm = infoDe(r.k), pr = mm.pref;
-      cnt[mm.prov]++;
-      var esTop = cnt[mm.prov] <= PLAZAS_P[mm.prov];
-      var posV = provFiltro ? cnt[provFiltro] : i + 1;
+      var mm = infoDe(r.k), pr = mm.pref, a = CAS.res.get(r.k) || { d: null, oi: -1, pos: null };
+      var aqui = provFiltro ? a.d === provFiltro : !!a.d;
+      var esTop = aqui, otra = provFiltro && !aqui;
+      var posV = provFiltro ? (aqui ? a.pos : '–') : i + 1;
+      var etq = a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza';
+      var nota2 = '';
+      if (otra) { var ip = mm.ops.indexOf(provFiltro); nota2 = (a.d && a.oi < ip) ? 'Se va a ' + PROVS[a.d] + ' (' + (a.oi + 1) + 'ª opción)' : (a.d ? 'No entra · va a ' + PROVS[a.d] : 'No entra en sus opciones'); }
       var match = (!provFiltro || enProv(mm, provFiltro)) && (!zonaFiltro || provFiltro !== 'MAD' || (mm.zona || '').split(',').indexOf(zonaFiltro) >= 0) && (!filtro.length || filtro.every(function (tk) { return r.words.some(function (w) { return w.startsWith(tk); }); })) && (!prefFiltro || (prefFiltro === 'none' ? !pr : pr === prefFiltro));
       if (pr && prefFiltro === pr) grupo++;
+      if (match && provFiltro && !filtro.length && !prefFiltro && !zonaFiltro && !cortePuesto && (CAS.cnt[provFiltro] || 0) >= PLAZAS_P[provFiltro] && otra && !(a.d && a.oi < mm.ops.indexOf(provFiltro))) { cortePuesto = true; var cut0 = el('li', 'corte', 'Corte · ' + PLAZAS_P[provFiltro] + ' plazas en ' + PROVS[provFiltro]); cut0.setAttribute('role', 'separator'); list.append(cut0); }
       if (match) {
         shown++;
         var li;
         if (compacta) {
-          li = el('li', 'fila' + (esTop ? ' top' : ''));
+          li = el('li', 'fila' + (esTop ? ' top' : '') + (otra ? ' otra' : ''));
           li.append(el('span', 'fp', String(posV)));
           var fn = el('span', 'fn'); fn.title = r.disp; fn.append(el('span', null, r.disp));
           if (r.c) fn.append(el('span', 'badge', 'Cupo'));
           if (pr) fn.append(el('span', 'badge pref', pr));
-          fn.append(el('span', 'badge prov', PROVS[mm.prov]));
-          if (mm.prov === 'MAD' && mm.zona) fn.append(el('span', 'badge zona', zonaTxt(mm.zona)));
+          fn.append(el('span', 'badge ' + (a.d ? 'dest' : 'fuera'), otra ? nota2 : etq));
+          if (enProv(mm, 'MAD') && mm.zona) fn.append(el('span', 'badge zona', zonaTxt(mm.zona)));
           if (prefFiltro && prefFiltro !== 'none') fn.append(el('span', 'fg', grupo + 'º en ' + prefFiltro));
           li.append(fn, el('span', 'fv', nf.format(r.t1)), el('span', 'fv', nf.format(r.t2)), el('span', 'ft', nf.format(r.T)));
         } else {
-          li = el('li', 'card' + (esTop ? ' top' : ''));
+          li = el('li', 'card' + (esTop ? ' top' : '') + (otra ? ' otra' : ''));
           li.append(el('div', 'pos', String(posV)));
           var who = el('div', 'who'); who.append(el('span', 'nm', r.disp));
           if (r.c) who.append(el('span', 'badge', 'Cupo reserva'));
           if (pr) who.append(el('span', 'badge pref', PREFS[pr]));
-          who.append(el('span', 'badge prov', PROVS[mm.prov]));
-          if (mm.prov === 'MAD' && mm.zona) who.append(el('span', 'badge zona', 'Zona: ' + zonaTxt(mm.zona)));
+          who.append(el('span', 'badge ' + (a.d ? 'dest' : 'fuera'), otra ? nota2 : (a.d ? 'Entra en ' + etq : 'Sin plaza en sus opciones')));
+          if (enProv(mm, 'MAD') && mm.zona) who.append(el('span', 'badge zona', 'Zona: ' + zonaTxt(mm.zona)));
+          who.append(el('span', 'tb', 'Preferencias: ' + mm.ops.map(function (p, j) { return (j + 1) + '. ' + PROVS[p]; }).join(' · ')));
           if (prefFiltro && prefFiltro !== 'none') who.append(el('span', 'tb', grupo + 'º entre quienes prefieren ' + PREFS[prefFiltro]));
           if (i > 0) {
             var c = compare(rows[i - 1], r);
@@ -696,22 +720,20 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
         if (filtro.length) li.classList.add('hit');
         list.append(li);
       }
-      var pc0 = provFiltro || 'MUR';
-      if (provFiltro && !filtro.length && !prefFiltro && PLAZAS_P[pc0] && enProv(mm, pc0) && cnt[pc0] === PLAZAS_P[pc0] && tot[pc0] > PLAZAS_P[pc0]) { var cut = el('li', 'corte', 'Corte estimado · ' + PLAZAS_P[pc0] + ' plazas en ' + PROVS[pc0]); cut.setAttribute('role', 'separator'); list.append(cut); }
     });
     var fc = $('fcount');
     if (filtrando && rows.length) {
       fc.hidden = false;
-      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' · el número es su puesto en ' + PROVS[provFiltro] : ' · el número es su puesto en la clasificación general') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
+      fc.textContent = shown ? (shown === 1 ? '1 persona' : shown + ' personas') + (provFiltro ? ' han pedido ' + PROVS[provFiltro] + ' · el número es su puesto entre quienes entran' : ' · el número es su puesto en la clasificación general') : (filtro.length ? 'Nadie con ese nombre en la clasificación todavía. Si eres tú, añádete con el buscador de arriba.' : 'Nadie con ese destino preferido todavía.');
       if (!shown && compacta) list.textContent = '';
     } else fc.hidden = true;
     if (justAdded != null) {
       var idx = rows.findIndex(function (r) { return r.k === justAdded; });
       if (idx >= 0) {
         var card = list.querySelector('[data-k="' + rows[idx].k + '"]');
-        if (!card) { filtro = []; $('fpos').value = ''; prefFiltro = ''; document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.f === '')); }); setProv(infoDe(rows[idx].k).prov); justAdded = rows[idx].k; render(); return; }
+        if (!card) { filtro = []; $('fpos').value = ''; prefFiltro = ''; document.querySelectorAll('.chip[data-f]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.f === '')); }); var aj = CAS.res.get(rows[idx].k); setProv(aj && aj.d ? aj.d : ''); justAdded = rows[idx].k; render(); return; }
         card.classList.add('flash');
-        toast('Añadido: ' + rows[idx].disp + ' · ' + posEn(rows[idx], infoDe(rows[idx].k).prov) + 'º en ' + PROVS[infoDe(rows[idx].k).prov]);
+        toast('Añadido: ' + rows[idx].disp + ' · entrarías en ' + txtAsig(CAS.res.get(rows[idx].k)));
         var b = card.getBoundingClientRect();
         if (b.top < 0 || b.bottom > window.innerHeight) card.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
       }
@@ -725,35 +747,36 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var conf = $('conf'), go = $('c-go');
     $('c-nm').textContent = r.disp;
     $('c-dni').value = '';
-    var mm0 = infoDe(r.k); selPref = mm0.pref; selProv = members.has(r.k) ? mm0.prov : ''; selAlt = mm0.alt; selZona = (mm0.prov === 'MAD' && mm0.zona) ? mm0.zona.split(',') : []; curR = r; paintPrefs();
+    var mm0 = infoDe(r.k); selPref = mm0.pref; selOps = members.has(r.k) ? mm0.ops.slice() : []; selProv = selOps[0] || ''; selAlt = mm0.alt; selZona = (enProv(mm0, 'MAD') && mm0.zona) ? mm0.zona.split(',') : []; curR = r; paintPrefs();
     var save = $('c-save'); save.hidden = true;
     if (members.has(r.k)) {
       var pos = ranked().findIndex(function (x) { return x.k === r.k; }) + 1;
-      $('c-sub').textContent = 'Nota ' + nf.format(r.T) + ' · Ya estás en la clasificación: puesto ' + pos + ' general' + ', ' + posEn(r, mm0.prov) + 'º en ' + PROVS[mm0.prov] + '. Para cambiar provincia o destino, escribe los 4 números de tu DNI y pulsa «Guardar preferencias».';
+      $('c-sub').textContent = 'Nota ' + nf.format(r.T) + ' · Ya estás apuntado (puesto ' + pos + ' general). Con tus preferencias entrarías en ' + txtAsig(CAS.res.get(r.k)) + '. Para cambiarlas, escribe los 4 números de tu DNI y pulsa «Guardar preferencias».';
       go.hidden = true; save.hidden = false; save.disabled = false; save.textContent = 'Guardar preferencias';
       save.onclick = function () {
         var dv = dniVal(); if (!dv) return;
         save.disabled = true; save.textContent = 'Guardando…';
-        api('POST', { accion: 'pref', k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false, zona: selProv === 'MAD' ? selZona.join(',') : '' })
-          .then(function (st) { $('conf').hidden = true; setYo(r.k); setProv(selProv); setMembers(st); toast('Preferencias guardadas · ' + PROVS[selProv]); })
+        if (!selOps.length) { toast('Añade al menos una provincia.', 'err'); return; }
+        api('POST', { accion: 'pref', k: r.k, dni: dv, pref: selPref, prov: selOps[0], ops: selOps, alt: false, zona: selOps.indexOf('MAD') >= 0 ? selZona.join(',') : '' })
+          .then(function (st) { $('conf').hidden = true; setYo(r.k); setMembers(st); var a1 = CAS.res.get(r.k); setProv(a1 && a1.d ? a1.d : selOps[0]); render(); toast('Guardado · entrarías en ' + txtAsig(a1)); })
           .catch(function (e) { save.disabled = false; save.textContent = 'Guardar preferencias'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo guardar. Inténtalo de nuevo.', 'err'); });
       };
     } else {
-      $('c-sub').textContent = 'Nota ' + nf.format(r.T) + (r.c ? ' · Cupo reserva' : '') + ' · Para añadirte, elige provincia y escribe los 4 números de tu DNI.';
+      $('c-sub').textContent = 'Nota ' + nf.format(r.T) + (r.c ? ' · Cupo reserva' : '') + ' · Para añadirte, elige tus provincias por orden y escribe los 4 números de tu DNI.';
       go.hidden = false; go.disabled = !GS; go.textContent = 'Añadirme a la clasificación';
       go.onclick = function () {
-        if (!selProv) { toast('Elige tu provincia antes de añadirte.', 'err'); return; }
+        if (!selOps.length) { toast('Añade al menos una provincia antes de añadirte.', 'err'); return; }
         var dv = dniVal(); if (!dv) return;
         go.disabled = true; go.textContent = 'Añadiendo…';
-        api('POST', { k: r.k, dni: dv, pref: selPref, prov: selProv, alt: false, zona: selProv === 'MAD' ? selZona.join(',') : '' })
-          .then(function (codes) { $('conf').hidden = true; justAdded = r.k; setYo(r.k); setProv(selProv); setMembers(codes); })
+        api('POST', { k: r.k, dni: dv, pref: selPref, prov: selOps[0], ops: selOps, alt: false, zona: selOps.indexOf('MAD') >= 0 ? selZona.join(',') : '' })
+          .then(function (codes) { $('conf').hidden = true; justAdded = r.k; setYo(r.k); setMembers(codes); })
           .catch(function (e) { go.disabled = false; go.textContent = 'Añadirme a la clasificación'; toast((e && e.message && e.message !== 'Failed to fetch') ? e.message : 'No se pudo añadir. Inténtalo de nuevo.', 'err'); });
       };
     }
     conf.hidden = false; go.hidden ? $('c-x').focus() : go.focus();
   }
   $('c-x').addEventListener('click', function () { $('conf').hidden = true; q.focus(); });
-  var selPref = '', selProv = '', selAlt = false, curR = null;
+  var selPref = '', selProv = '', selAlt = false, curR = null, selOps = [];
   function dniVal() {
     var v = $('c-dni').value.replace(/\D/g, '');
     if (v.length !== 4) { toast('Escribe los 4 números de tu DNI tal como aparecen en el listado oficial (por ejemplo, ***1234** → 1234).', 'err'); $('c-dni').focus(); return ''; }
@@ -761,18 +784,34 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   }
   function paintPrefs() {
     document.querySelectorAll('.po').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.p === selPref)); });
-    document.querySelectorAll('.pv').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === selProv)); });
+    var ol = $('ops-list'); ol.textContent = '';
+    selOps.forEach(function (p, i) {
+      var li = el('li'); li.append(el('span', 'n', String(i + 1)));
+      var pn = el('span', 'pn', PROVS[p] + ' '); pn.append(el('small', null, '(' + PLAZAS_P[p] + (PLAZAS_P[p] === 1 ? ' plaza)' : ' plazas)'))); li.append(pn);
+      var ac = el('span', 'ac');
+      [['↑', 'Subir', -1], ['↓', 'Bajar', 1], ['✕', 'Quitar', 0]].forEach(function (b) {
+        var bt = el('button', null, b[0]); bt.type = 'button'; bt.setAttribute('aria-label', b[1] + ' ' + PROVS[p]);
+        if ((b[2] === -1 && i === 0) || (b[2] === 1 && i === selOps.length - 1)) bt.disabled = true;
+        bt.addEventListener('click', function () {
+          if (b[2] === 0) selOps.splice(i, 1); else { var j = i + b[2]; var tmp = selOps[j]; selOps[j] = selOps[i]; selOps[i] = tmp; }
+          paintPrefs();
+        });
+        ac.append(bt);
+      });
+      li.append(ac); ol.append(li);
+    });
+    ol.hidden = !selOps.length;
+    var sel = $('ops-add'); sel.disabled = selOps.length >= 8;
+    sel.options[0].textContent = selOps.length >= 8 ? 'Ya tienes 8 provincias' : (selOps.length ? '+ Añadir otra provincia…' : '+ Añadir provincia…');
+    [].forEach.call(sel.querySelectorAll('option[value]'), function (o) { if (o.value) o.disabled = selOps.indexOf(o.value) >= 0; });
     var w = $('alt-w'), show = false;
-    if (curR && selProv) {
-      var pm = posEn(curR, selProv, { prov: selProv, alt: false, pref: '' });
-      if (pm > PLAZAS_P[selProv]) {
-        var otras = Object.keys(PROVS).filter(function (p) { return p !== selProv; }).map(function (p) { return [p, posEn(curR, p, { prov: p, alt: false, pref: '' })]; }).filter(function (x) { return x[1] <= PLAZAS_P[x[0]]; });
-        show = true;
-        $('alt-s').textContent = 'En ' + PROVS[selProv] + ' serías el ' + pm + 'º (plazas estimadas: ' + PLAZAS_P[selProv] + '). ' + (otras.length ? 'Entrarías dentro de las plazas estimadas en: ' + otras.map(function (x) { return PROVS[x[0]] + ' (' + x[1] + 'º)'; }).join(', ') + '. ' : '') + 'Solo puedes estar en una lista y puedes cambiarte cuando quieras.';
-      }
+    if (curR && selOps.length) {
+      var sim = cascada({ k: curR.k, ops: selOps }).res.get(curR.k);
+      show = true;
+      $('alt-s').textContent = 'Con este orden entrarías en ' + txtAsig(sim) + '.';
     }
     w.hidden = !show;
-    $('zona-w').hidden = selProv !== 'MAD';
+    $('zona-w').hidden = selOps.indexOf('MAD') < 0;
     document.querySelectorAll('.pz').forEach(function (b) { b.setAttribute('aria-pressed', String(selZona.indexOf(b.dataset.z) >= 0)); });
   }
   document.querySelectorAll('.pz').forEach(function (b) {
@@ -789,6 +828,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   });
   document.querySelectorAll('.pv').forEach(function (b) {
     b.addEventListener('click', function () { selProv = b.dataset.v; paintPrefs(); });
+  });
+  $('ops-add').addEventListener('change', function () {
+    var v = $('ops-add').value; $('ops-add').value = '';
+    if (v && selOps.indexOf(v) < 0 && selOps.length < 8) { selOps.push(v); paintPrefs(); }
   });
   document.querySelectorAll('.po').forEach(function (b) {
     b.addEventListener('click', function () { selPref = selPref === b.dataset.p ? '' : b.dataset.p; paintPrefs(); });
@@ -882,12 +925,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       render();
     });
   });
-  document.querySelectorAll('.chip[data-v]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      provTocado = true; setProv(b.dataset.v);
-      render();
-    });
-  });
+  $('fprov').addEventListener('change', function () { provTocado = true; setProv($('fprov').value); render(); });
   $('v-d').addEventListener('click', function () { setVista('d'); });
   $('fpos').addEventListener('input', function () {
     var n = norm($('fpos').value);
