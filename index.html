@@ -181,9 +181,16 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .ops .pn .sem { display: flex; margin-top: .15rem; }
 .sem i { width: .65rem; height: .65rem; border-radius: 50%; flex: none; }
 .sem.v i { background: #2E9E44; } .sem.a i { background: #E8A317; } .sem.r i { background: #D63A2F; }
-.cver { display: inline-block; margin-top: .9rem; font-weight: 700; font-size: .875rem; color: var(--lime); text-decoration: none; }
-.cver:hover { text-decoration: underline; }
-.cortes { margin: 0 0 2rem; scroll-margin-top: 1rem; }
+.cver { display: inline-block; margin-top: .9rem; padding: .55rem .9rem; border: 1px solid rgba(149, 193, 31, .6); border-radius: 99px; background: rgba(149, 193, 31, .14); font: 700 .875rem var(--f-body, inherit); color: var(--lime); cursor: pointer; }
+.cver:hover { background: rgba(149, 193, 31, .24); }
+.cver:focus-visible, .cclose:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
+.cortes { position: fixed; inset: 0; z-index: 60; overflow-y: auto; background: rgba(8, 18, 40, .55); padding: 1rem; }
+.cortes[hidden] { display: none; }
+.cbox { position: relative; max-width: 40rem; margin: 0 auto; padding: 1.1rem 1rem 1rem; border-radius: 18px; background: var(--bg, var(--card)); box-shadow: 0 20px 60px rgba(0, 0, 0, .35); }
+.cbox .sec-head { padding-right: 2.6rem; }
+.cclose { position: absolute; top: .8rem; right: .8rem; width: 2.25rem; height: 2.25rem; border: 1px solid var(--line); border-radius: 50%; background: var(--card); color: var(--ink); font-size: 1rem; cursor: pointer; }
+body.modal { overflow: hidden; }
+@media (max-width: 480px) { .cortes { padding: .5rem; } .cbox { padding: 1rem .6rem .7rem; } .cbox .ctab th, .cbox .ctab td { padding: .45rem .45rem; } }
 .ctab-w { margin-top: .8rem; border: 1px solid var(--line); border-radius: 14px; background: var(--card); overflow: hidden; }
 .ctab { width: 100%; border-collapse: collapse; font-size: .875rem; }
 .ctab th, .ctab td { padding: .45rem .7rem; text-align: left; border-top: 1px solid var(--line); }
@@ -424,7 +431,7 @@ body.intro-on { overflow: hidden; }
       <div class="stat"><dt id="s-plz-t">Plazas en España</dt><dd id="s-plz">1.056</dd><small id="s-plz2">971 generales · 85 cupo</small></div>
       <div class="stat"><dt id="s-c-t">Corte Murcia</dt><dd id="s-c">–</dd><small id="s-c2"></small></div>
     </dl>
-    <a class="cver" href="#cortes">Ver el corte de cada provincia ›</a>
+    <button type="button" class="cver" id="cver">Ver el corte de cada provincia ›</button>
     <p class="desn" id="s-d">Plazas C1 que quedaron desiertas en toda España en el macroconcurso 2026: 912. Es solo un dato informativo: no cambia las plazas ni el orden de la clasificación.</p>
   </div>
 </section>
@@ -443,7 +450,9 @@ body.intro-on { overflow: hidden; }
     </ol>
     <p><b>Cómo se reparte:</b> se va por orden de nota. A cada persona se le asigna su primera provincia que todavía tenga plazas libres; si en esa ya no entra, pasa a la siguiente de su lista, y así hasta que entra en una. Puedes cambiar tus provincias cuando quieras.</p>
   </section>
-  <section class="cortes" id="cortes" aria-labelledby="cortes-t">
+  <section class="cortes" id="cortes" role="dialog" aria-modal="true" aria-labelledby="cortes-t" hidden>
+   <div class="cbox">
+    <button type="button" class="cclose" id="cclose" aria-label="Cerrar">✕</button>
     <div class="sec-head">
       <h2 id="cortes-t">Corte por provincia</h2>
       <p class="sec-sub">Provisional, con las personas que han elegido destino. Pulsa una provincia para ver su lista.</p>
@@ -452,6 +461,7 @@ body.intro-on { overflow: hidden; }
       <thead><tr><th scope="col">Provincia</th><th scope="col">Plazas</th><th scope="col">Asignados</th><th scope="col">Corte</th></tr></thead>
       <tbody id="ctab"></tbody>
     </table></div>
+   </div>
   </section>
   <div class="sec-head">
     <h2>Clasificación</h2>
@@ -584,6 +594,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     provFiltro = p;
     var fp = document.getElementById('fprov'); if (fp) fp.value = p;
   }
+  function abreCortes(si) {
+    $('cortes').hidden = !si; document.body.classList.toggle('modal', si);
+    if (si) { pintaCortes(); $('cclose').focus(); } else { var b = $('cver'); if (b) b.focus(); }
+  }
   function pintaCortes() {
     var tb = $('ctab'); if (!tb) return; tb.textContent = '';
     [].forEach.call($('fprov').querySelectorAll('optgroup'), function (g) {
@@ -591,7 +605,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       [].forEach.call(g.querySelectorAll('option'), function (o) {
         var p = o.value, n = CAS.cnt[p] || 0, np = PLAZAS_P[p], tr = el('tr', 'crow' + (p === provFiltro ? ' sel' : ''));
         var b = el('button', null, PROVS[p]); b.type = 'button';
-        b.addEventListener('click', function () { provTocado = true; setProv(p); render(); $('lista').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' }); });
+        b.addEventListener('click', function () { abreCortes(false); provTocado = true; setProv(p); render(); $('lista').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' }); });
         var c0 = el('td'); c0.append(b); tr.append(c0);
         tr.append(el('td', 'num', String(np)));
         var ca = el('td', 'num', String(n)); if (n >= np) ca.append(el('small', 'llena', 'completa')); tr.append(ca);
@@ -1002,6 +1016,12 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       render();
     });
   });
+  $('cver').addEventListener('click', function () { abreCortes(true); });
+  $('cclose').addEventListener('click', function () { abreCortes(false); });
+  $('cortes').addEventListener('click', function (e) { if (e.target === this) abreCortes(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('cortes').hidden) abreCortes(false); });
+  if (location.hash === '#cortes') setTimeout(function () { abreCortes(true); }, 0);
+  window.addEventListener('hashchange', function () { if (location.hash === '#cortes') abreCortes(true); });
   $('fprov').addEventListener('change', function () { provTocado = true; setProv($('fprov').value); render(); });
   $('v-d').addEventListener('click', function () { setVista('d'); });
   $('fpos').addEventListener('input', function () {
