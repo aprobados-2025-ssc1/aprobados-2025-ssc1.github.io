@@ -122,7 +122,8 @@ mark { background: none; color: inherit; text-decoration: underline; text-decora
 .yo-t { min-width: 0; display: grid; gap: .15rem; }
 .yo-l { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .yo-t b { font: 800 1.6rem/1.1 var(--f-display); }
-.yo-t span:last-child { font-size: .875rem; color: var(--muted); overflow-wrap: anywhere; }
+.yo-f { font-size: .8125rem; line-height: 1.4; color: var(--ink); }
+.yo-t #yo-s { font-size: .875rem; color: var(--muted); overflow-wrap: anywhere; }
 .yo-a { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; }
 .fila.es-yo, .card.es-yo { box-shadow: inset 4px 0 0 var(--lime); background: rgba(149, 193, 31, .12); }
 .badge.tu { background: var(--lime); color: var(--on-lime); border-color: var(--lime); }
@@ -443,7 +444,7 @@ body.intro-on { overflow: hidden; }
 
 <main class="main wrap">
   <section id="yo" class="yo" hidden aria-live="polite">
-    <div class="yo-t"><span class="yo-l">Tu posición</span><b id="yo-p"></b><span id="yo-s"></span></div>
+    <div class="yo-t"><span class="yo-l">Tu posición</span><b id="yo-p"></b><span id="yo-s"></span><small id="yo-f" class="yo-f"></small></div>
     <div class="yo-a"><button id="yo-ver" class="go" type="button">Verme en la lista</button><button id="yo-no" class="cx" type="button">No soy yo</button></div>
   </section>
   <section class="guia" aria-labelledby="guia-t">
@@ -582,6 +583,9 @@ function compare(a, b) {
   var PLAZAS = 35;
 var PREFS = { CAISS: 'CAISS', INSS: 'INSS', TGSS: 'Tesorería (TGSS)', ISM: 'ISM' };
 var PROVS = {"ALM": "Almería", "CAD": "Cádiz", "COR": "Córdoba", "GRA": "Granada", "HUE": "Huelva", "JAE": "Jaén", "MAL": "Málaga", "SEV": "Sevilla", "HUS": "Huesca", "TER": "Teruel", "ZAR": "Zaragoza", "AST": "Asturias", "BAL": "Illes Balears", "LPA": "Las Palmas", "TFE": "Santa Cruz de Tenerife", "CAN": "Cantabria", "AVI": "Ávila", "BUR": "Burgos", "LEO": "León", "PAL": "Palencia", "SAL": "Salamanca", "SEG": "Segovia", "SOR": "Soria", "VLL": "Valladolid", "ZAM": "Zamora", "ALB": "Albacete", "CRE": "Ciudad Real", "CUE": "Cuenca", "GUA": "Guadalajara", "TOL": "Toledo", "BAR": "Barcelona", "GIR": "Girona", "LLE": "Lleida", "TAR": "Tarragona", "ALI": "Alicante", "CAS": "Castellón", "VAL": "Valencia", "BAD": "Badajoz", "CAC": "Cáceres", "ACO": "A Coruña", "LUG": "Lugo", "OUR": "Ourense", "PON": "Pontevedra", "MAD": "Madrid", "MUR": "Murcia", "NAV": "Navarra", "ALA": "Álava", "BIZ": "Bizkaia", "GIP": "Gipuzkoa", "RIO": "La Rioja", "CEU": "Ceuta", "MEL": "Melilla"};
+var SEDE = "CGGTMSMVSBCMCSGSVMVMVVMCMVMCVLNMMGCMVCMCLBTVSMGMGCITNSBVVMIBMSMBMSCLCMMNBCVLBCGGMMSSCMMNGVGSVSSBSNMVVGSVMBMMNMSGCSGCVCCCVVVSSVTBSGGCCMBMGVMVVGSGGLMBMSSSMMVMVSNSCVMSVSSGCTSCMMVVVNVVCVCCGIMMGMSGCVNMSSMMIMVSVGTBGLBVGCSSGMSIBGLCSMMBBMVGGVVVNMGGVGMTGVMTMMVCSGCVMSMGSLMMVMCSMLBMSCMMGBGCVCCMCGGGSSBBVSSGGSMCSLGMGVGMVNGMSMMVGVLGVMVGGMCSSMSMVVLCCGSGSGSSMVVMVNCGLCSCVMMMTSMVVMSCBTGLSSVNSMMBVTSSVNBMBNBSNBGVSCMTSTVMMBSNMMGVSVGGGVLCLLCVTMSVMSSGGGLMMVVGVLBVGSTTCCVCTGSMMGMMSSMBSMMCVSSLMMMCSVGMMMCSVVGSMMMMCVGMLGMNSCLVGBMVSBSNMMGVSLSBGMTTMGMTGMBTGMMSVGMGVVGLLCMVVSVGGGLVMSCCGMVMVVMMVMVMSBVLVCVGSVLBSSGVCBMGMSGMMVCGVCGMVGBMLBGSMSSNIVGMCGSVVVMVGVMGMVSMGSVBSVCMVMMMCVGSVMSISMVVMSGSNGVCMGGMMBSSGSSMSSIGNCCCGBMSGVGLLSCMMSBTVSMSSGMMSGSSBSGVSCLSLSSGGSSMMTSMSBVGTMSSGIITSVNGSSBMIMGSVCMNCSGVMBBLLGBBGCSCLSMMVSMMMMBTMBSMCGSGGVSSGVBTCLSMMLGGNSSVMGVSMCVMVCMVLMVMSGLGGSMSMSVGCTVMITTCGCMCMVMIIMVMLVSSMMVVVVLMVVVMVGSCCGMSCVNLMTBMVVSVSMCVVMGGBCCMCMMGTBLSLMVNMSGVMSCCSCGMSGMSTSMMCSMVMVMMSGIVSGNIVTGMMIMCGMGVGMTVCMMCSGNMVMSSGSSMMVLTGSGSNLVMSSSMCNSGVVVBBSIBBCLLVVLVGSBMMSSCMSCCLBGMVGCVTVMVGVS";
+var PROV_SEDE = {"VAL": "V", "ALI": "V", "CAS": "V", "MUR": "V", "ALB": "V", "TER": "V", "SEV": "S", "CAD": "S", "HUE": "S", "COR": "S", "BAD": "S", "CAC": "S", "MAL": "G", "GRA": "G", "ALM": "G", "JAE": "G", "CEU": "G", "MEL": "G", "MAD": "M", "TOL": "M", "GUA": "M", "CRE": "M", "CUE": "M", "VLL": "L", "LEO": "L", "BUR": "L", "PAL": "L", "SAL": "L", "ZAM": "L", "AVI": "L", "SEG": "L", "SOR": "L", "CAN": "L", "ACO": "C", "LUG": "C", "OUR": "C", "PON": "C", "AST": "C", "BAR": "B", "GIR": "B", "LLE": "B", "TAR": "B", "NAV": "N", "ALA": "N", "BIZ": "N", "GIP": "N", "RIO": "N", "ZAR": "N", "HUS": "N", "TFE": "T", "LPA": "T", "BAL": "I"};
+var SEDE_NOM = {"M": "Madrid", "V": "Valencia", "S": "Sevilla", "G": "Málaga", "L": "Valladolid", "C": "A Coruña", "T": "Santa Cruz de Tenerife", "B": "Barcelona", "N": "Navarra", "I": "Illes Balears"};
 var DES_C1 = {"ALA": 19, "BAR": 173, "BIZ": 51, "CAC": 4, "CAN": 1, "CAS": 9, "CUE": 1, "GIR": 27, "GIP": 46, "HUS": 4, "BAL": 32, "RIO": 7, "LLE": 10, "MAD": 424, "NAV": 34, "PAL": 1, "SEG": 8, "SOR": 1, "TAR": 19, "TER": 5, "TOL": 1, "VAL": 7, "ZAR": 28};
 var PLAZAS_P = {"ALM": 20, "CAD": 28, "COR": 15, "GRA": 12, "HUE": 15, "JAE": 11, "MAL": 22, "SEV": 42, "HUS": 15, "TER": 8, "ZAR": 28, "AST": 14, "BAL": 38, "LPA": 20, "TFE": 26, "CAN": 17, "AVI": 13, "BUR": 17, "LEO": 5, "PAL": 11, "SAL": 13, "SEG": 10, "SOR": 7, "VLL": 16, "ZAM": 9, "ALB": 9, "CRE": 13, "CUE": 11, "GUA": 13, "TOL": 18, "BAR": 99, "GIR": 26, "LLE": 21, "TAR": 27, "ALI": 34, "CAS": 19, "VAL": 53, "BAD": 16, "CAC": 16, "ACO": 26, "LUG": 8, "OUR": 1, "PON": 22, "MAD": 228, "MUR": 32, "NAV": 22, "ALA": 15, "BIZ": 31, "GIP": 28, "RIO": 13, "CEU": 11, "MEL": 6};
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
@@ -619,12 +623,21 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       });
     });
   }
+  function faltanTxt(k, p) {
+    var r = DATA[k], n = 0, ns = 0, sd = p ? PROV_SEDE[p] : '';
+    DATA.forEach(function (x) { if (x.k !== k && !members.has(x.k) && compare(x, r).c < 0) { n++; if (sd && SEDE.charAt(x.k) === sd) ns++; } });
+    if (!n) return 'Todos los aprobados con más nota que tú ya han elegido destino.';
+    var t = 'Faltan ' + n + (n === 1 ? ' aprobado con más nota que tú que no ha elegido destino' : ' aprobados con más nota que tú que no han elegido destino');
+    if (sd) t += '; ' + ns + (ns === 1 ? ' se examinó' : ' se examinaron') + ' en ' + SEDE_NOM[sd] + (SEDE_NOM[sd] === PROVS[p] ? '' : ' (sede de ' + PROVS[p] + ')');
+    return t + '.';
+  }
   function pintaYo(rows) {
     var box = $('yo');
     if (yo == null || !members.has(yo)) { box.hidden = true; return; }
     var r = DATA[yo], a = CAS.res.get(yo);
     $('yo-p').textContent = a && a.d ? a.pos + 'º en ' + PROVS[a.d] : 'Sin plaza en tus opciones';
     $('yo-s').textContent = r.disp + ' · nota ' + nf.format(r.T) + ' · ' + (a && a.d ? 'tu ' + (a.oi + 1) + 'ª opción · ' + PLAZAS_P[a.d] + ' plazas' : 'añade más provincias a tu lista');
+    $('yo-f').textContent = faltanTxt(yo, provFiltro || (a && a.d) || (members.get(yo).ops || [])[0]);
     box.hidden = false;
   }
   var API = 'https://script.google.com/macros/s/AKfycbzDZR4HR3Ofpq0ZCcGlYAsd_eVonfMW-FaiA_vMKK5a9H_Dj_CIZRiTYO7UBnazGE4MZw/exec';
@@ -914,7 +927,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     if (curR && selOps.length) {
       var sim = cascada({ k: curR.k, ops: selOps }).res.get(curR.k);
       show = true;
-      $('alt-s').textContent = 'Con este orden entrarías en ' + txtAsig(sim) + '.';
+      $('alt-s').textContent = 'Con este orden entrarías en ' + txtAsig(sim) + '. ' + faltanTxt(curR.k, (sim && sim.d) || selOps[0]);
     }
     w.hidden = !show;
     $('zona-w').hidden = selOps.indexOf('MAD') < 0;
