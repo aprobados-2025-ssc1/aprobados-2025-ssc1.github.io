@@ -484,7 +484,7 @@ body.intro-on { overflow: hidden; }
       <li><b>Fallos de la 2ª parte</b>: menos fallos, primero.</li>
       <li><b>Orden alfabético</b> contando desde la U: U, V, W, X, Y, Z, A, B… hasta la T.</li>
     </ol>
-    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona elige sus provincias por orden (puede añadir todas). Los marcados como «estimado» no se han apuntado aquí: sus preferencias salen de otro simulador público y solo se usan para calcular mejor el reparto. Por orden de nota, a cada uno se le asigna la primera de sus provincias que aún tenga plazas; si no entra, pasa a la siguiente. Las plazas son las de la convocatoria de septiembre de 2025 (entre paréntesis en el selector). En verde, los que entran en la provincia que estás viendo; en gris, quienes la pidieron pero entran en otra o no caben. La nota de corte es la del último que entra; mientras no se llenen las plazas, es provisional.</p>
+    <p class="sec-sub" style="margin:0 0 .9rem">Cada persona elige sus provincias por orden (puede añadir todas). Por orden de nota, a cada uno se le asigna la primera de sus provincias que aún tenga plazas; si no entra, pasa a la siguiente. Las plazas son las de la convocatoria de septiembre de 2025 (entre paréntesis en el selector). En verde, los que entran en la provincia que estás viendo; en gris, quienes la pidieron pero entran en otra o no caben. La nota de corte es la del último que entra; mientras no se llenen las plazas, es provisional.</p>
   </details>
   <div class="tools">
     <div class="fwrap find">
@@ -586,15 +586,10 @@ var PROVS = {"ALM": "Almería", "CAD": "Cádiz", "COR": "Córdoba", "GRA": "Gran
 var SEDE = "CGGTMSMVSBCMCSGSVMVMVVMCMVMCVLNMMGCMVCMCLBTVSMGMGCITNSBVVMIBMSMBMSCLCMMNBCVLBCGGMMSSCMMNGVGSVSSBSNMVVGSVMBMMNMSGCSGCVCCCVVVSSVTBSGGCCMBMGVMVVGSGGLMBMSSSMMVMVSNSCVMSVSSGCTSCMMVVVNVVCVCCGIMMGMSGCVNMSSMMIMVSVGTBGLBVGCSSGMSIBGLCSMMBBMVGGVVVNMGGVGMTGVMTMMVCSGCVMSMGSLMMVMCSMLBMSCMMGBGCVCCMCGGGSSBBVSSGGSMCSLGMGVGMVNGMSMMVGVLGVMVGGMCSSMSMVVLCCGSGSGSSMVVMVNCGLCSCVMMMTSMVVMSCBTGLSSVNSMMBVTSSVNBMBNBSNBGVSCMTSTVMMBSNMMGVSVGGGVLCLLCVTMSVMSSGGGLMMVVGVLBVGSTTCCVCTGSMMGMMSSMBSMMCVSSLMMMCSVGMMMCSVVGSMMMMCVGMLGMNSCLVGBMVSBSNMMGVSLSBGMTTMGMTGMBTGMMSVGMGVVGLLCMVVSVGGGLVMSCCGMVMVVMMVMVMSBVLVCVGSVLBSSGVCBMGMSGMMVCGVCGMVGBMLBGSMSSNIVGMCGSVVVMVGVMGMVSMGSVBSVCMVMMMCVGSVMSISMVVMSGSNGVCMGGMMBSSGSSMSSIGNCCCGBMSGVGLLSCMMSBTVSMSSGMMSGSSBSGVSCLSLSSGGSSMMTSMSBVGTMSSGIITSVNGSSBMIMGSVCMNCSGVMBBLLGBBGCSCLSMMVSMMMMBTMBSMCGSGGVSSGVBTCLSMMLGGNSSVMGVSMCVMVCMVLMVMSGLGGSMSMSVGCTVMITTCGCMCMVMIIMVMLVSSMMVVVVLMVVVMVGSCCGMSCVNLMTBMVVSVSMCVVMGGBCCMCMMGTBLSLMVNMSGVMSCCSCGMSGMSTSMMCSMVMVMMSGIVSGNIVTGMMIMCGMGVGMTVCMMCSGNMVMSSGSSMMVLTGSGSNLVMSSSMCNSGVVVBBSIBBCLLVVLVGSBMMSSCMSCCLBGMVGCVTVMVGVS";
 var PROV_SEDE = {"VAL": "V", "ALI": "V", "CAS": "V", "MUR": "V", "ALB": "V", "TER": "V", "SEV": "S", "CAD": "S", "HUE": "S", "COR": "S", "BAD": "S", "CAC": "S", "MAL": "G", "GRA": "G", "ALM": "G", "JAE": "G", "CEU": "G", "MEL": "G", "MAD": "M", "TOL": "M", "GUA": "M", "CRE": "M", "CUE": "M", "VLL": "L", "LEO": "L", "BUR": "L", "PAL": "L", "SAL": "L", "ZAM": "L", "AVI": "L", "SEG": "L", "SOR": "L", "CAN": "L", "ACO": "C", "LUG": "C", "OUR": "C", "PON": "C", "AST": "C", "BAR": "B", "GIR": "B", "LLE": "B", "TAR": "B", "NAV": "N", "ALA": "N", "BIZ": "N", "GIP": "N", "RIO": "N", "ZAR": "N", "HUS": "N", "TFE": "T", "LPA": "T", "BAL": "I"};
 var SEDE_NOM = {"M": "Madrid", "V": "Valencia", "S": "Sevilla", "G": "Málaga", "L": "Valladolid", "C": "A Coruña", "T": "Santa Cruz de Tenerife", "B": "Barcelona", "N": "Navarra", "I": "Illes Balears"};
-/* Preferencias estimadas (otra web, sin datos personales): k:letras, letras en el orden de EST_C */
-var EST_C = 'ALA ALB ALI ALM AST AVI BAD BAR BIZ BUR CAC CAD CAN CAS CEU CRE COR ACO CUE GIR GRA GUA GIP HUE HUS BAL JAE LEO LLE LUG MAD MAL MEL MUR NAV OUR PAL LPA PON RIO SAL TFE SEG SEV SOR TAR TER TOL VAL VLL ZAM ZAR'.split(' ');
-var EST_T = "67:meWiPLE 312:RFqul 384:Wc 332:W 1012:rM 238:FlRqu 16:W 848:rMDJE 235:cH 214:Rqlxu 858:q 171:rMDJB 313:EvXOV 229:E 750:miEh 744:FlkRn 805:Hcdub 516:Rlx 367:MrJDYB 770:h 1000:FlRqu 659:HcdbuEVpWsvqnRAUemiw 589:h 413:HcdsW 382:RqlxuAFd 386:hHtTC 779:eDMJmBKY 68:rDMJBe 189:bscHW 302:dHucA 108:Z 348:b 938:FquRl 196:RxlqF 406:lRxFq 194:IawNijye 57:Ev 264:Hdcbg 290:h 44:lRxqF 163:lFo 736:RqlxF 801:HNcWES 191:duFHA 77:MJrDe 547:bHcsW 527:PLWFl 579:FquR 838:OYfXk 1041:lugxRFd 74:bsHcpU 261:meDky 573:hTtCabcegkpjnxKDVWB 967:VpsEO 663:RxlkqugAF 466:KEXBQ 614:xRlqFuOE 51:LPRFulEqxAO 102:RlxFq 176:bcsHWpVEvAqnQOfUZzXe 626:HbcNd 553:uA 476:RxlqF 0:DrMJeBYKjm 97:me 398:EP 605:uAdFqRH 456:WE 837:duHFA 130:uAFdR 480:cVqE 54:rDMJemB 491:bsHpV 639:htTCF 120:cHbWdn 356:nWUTcZH 56:H 112:rMDeB 624:HxRcl 156:WncTE 26:EvVeS 520:FlR 30:EvfQV 534:EvVQf 1032:dHcuAF 481:EfQ 566:EvVci 92:Wc 633:HcbWd 304:qAFuR 909:ElR 173:E 760:HcdbEu 833:E 721:MJrDBYO 369:L 792:EvQVf 402:HcbdWs 604:HcbdpW 396:Rxlqg 69:EvfQVsjepBulRkISXYZ 638:LbcWP 335:rDJMeYEB 873:EVvQfspXM 471:LFRcXnBe 1029:HrMDeQOSXwiIcW 671:E 39:rMDeJB 960:RqFAlxu 893:c 222:OYfemX 835:EVfek 969:z 431:FuqAlRx 630:E 464:xRglqFukd 550:cHbsp 902:RlEqx 575:XKQfE 631:lRFxquAoG 875:c 763:Nja 175:bscHW 660:EVWspvKcyOQSjYdikmno 276:uAFdqR 845:Rxlqg 1049:FulqR 353:emDBK 122:WnbUc 46:FuqRW 201:EpVvl 869:bscWH 946:EVkgv 289:lRx 218:xRlgq 954:BjNSeXYmsvbfDJKUVInE 223:MrJDe 657:EVsvQfbkjmTYW 733:LPlRW 642:rMDen 484:cHbWd 608:XiBjrDMQOaemN 984:lRxqg 517:jKaXmNQSYOeiE 78:qduRFA 918:bsHWc 213:rMDJeBEh 228:thGTCnWZ 640:Rxqgkl 522:PLqluFxR 1039:MrJDfejmBEYVkdhlcqti 366:RqlxFuAgpe 305:cHbWn 686:rDJMeBY 741:EvVsQ 82:lRxqFgduAkcWHnZ 813:fEVXQOKYjk 426:RqxlgudkP 73:MJrDYBOe 746:zlRxr 1001:RlqFg 652:Hcemgikjfld 731:MrEJD 14:qFRApl 216:lFRuqxAdokgWnmrzEhei 546:RFxulqAgk 259:oFluqx 682:z 66:JMrDY 347:uqOZm 651:RlxqE 941:FqulA 393:htTCn 629:nWUTc 609:h 970:E 705:lRxFqgbkuAEhdsVW 829:rDMJY 910:duHAGoL 489:EV 914:MrLPi 922:mi 738:WnIsbTUSpAY 81:EVQfR 719:cWTHEbnqRduApFZlfgk 670:uAdFqHxp 768:eE 928:kg 241:GFoduqiA 1051:nWThmec 860:EVQvWfm 143:FulqR 461:RxlqA 1043:rDMJeBm 724:XKOfEQj 35:EcWTh 61:lRxqAgkFpuVEd 355:MrDJe 625:HcdbuAq 1033:lRoxF 42:LPWcwFlme 58:zChty 301:BYeXKjOfQSmsVUDvykZH 34:eBDrYMJXO 857:DrMJeBOP 277:h 795:qARFu 734:Rxl 83:kgOVRxlqfYuQFAHrmdJp 188:uAdFqpRHlbxVcsEh 206:PLefEXQ 593:lRxqAuFgkpV 823:RxlFq 287:FuqARdlxpV 337:duHAqc 559:rMDJeBYmKOXjfQiaNkVv 581:Hcd 830:EvV 979:Wbcn 784:WncHqhEUb 773:FGRquAQ 154:XEVOf 162:VEkfv 233:HcbdWpVn 325:EVvpQf 545:rMDJe 375:MaJirDNIjme 50:cWHnz 591:uAFdV 586:qRAFlpgxu 544:BYDJX 370:FuqAdRlxHpbgckVsWnZL 164:WnsUcbTZVmpA 497:duFHAlxqR 96:lRxquFdAgkoGLEW 647:VEkf 52:ZyINU 230:cHbWU 89:HcdEb 383:loxgqRkpAdFusbOfVYS 897:PL 450:WcnbUE 895:XOYKfjBekSEm 948:rMDJeOB 271:EVvQf 311:VEspv 743:qAlxduRFpgkVbsvHfQOc 199:vEVWc 828:cWnHbsuRlF 1013:N 867:huEGl 407:NSIaBOXmei 585:RqxdFulP 1025:rJEDYMeX 971:MJrDEBemOXYwif 179:cHWnu 110:AquRpFVEl 280:HcdbWspuA 182:MJrDeNjOmg 904:RqxlFOydVkgvjnsrewEH 934:rMDJBejO 543:BKXYemjOfSrDJQVEFkq 799:AuqdpRxVFlEbsvQgkHZS 150:RxlqAFudgHkpbcVsfOvW 344:EFRuldqAxnWVvOZce 202:bscHWEpV 1024:h 1017:WnUZh 457:AuqdFRlxpbH 371:OYfXK 618:AFupqldRgksHV 821:uFdAl 209:SZNjwQvI 341:lFRuxqAdogkpH 361:xRlgkq 296:FduxlqRAkgEWnbcHizPh 414:FudlR 486:uAdFqRHlpxbVEckgWQOs 765:lRFxgk 641:HcbWd 861:WnUyesmc 541:HcdbA 180:BDreYJKXLji 720:RlxqAFudgkoGEepQ 415:FGulRdxAq 493:HcdnWZVvfQEemBXONbTI 748:qRpAFxulkg 852:ez 727:uAqdFRlxHpbgcVsWkE 809:QXOiKYjf 343:RlqFa 121:WnbEc 569:sVEp 1047:gkOYE 452:LPlFr 854:LPRqr 877:nWTZcCshybHvESNtVp 267:RxlqgFpL 448:ZEMrDh 791:LP 309:iawON 992:lpEqFRo 255:bscKHBe 340:RlxgkqpOufVAo 417:HcbdpsWuvVUFqZnERlyk 879:E 887:emBDK 702:h 703:LejXmKYB 826:EVcW 211:bsEcHp 90:duFHc 288:RxlqgFpVk 561:EWZhV 293:AuqpdFR 502:jKXaimN 797:uAFdqHpRxV 767:cHWbn 10:MrJEQ 921:h 923:RqxlguAFkpsVdQOZfvYH 896:EVvQjfik 22:EVvQpfXsWnZYbyCRFqjU 236:iamwIjNekKBOQ 777:MJrDYeXQ 103:ZfQyUjvSsEOWdcbzkgp 350:rDJMeBY 806:CThyZ 318:BeKXYOmDJQ 570:WncHsTEh 962:yZ 119:MrJDEOe 665:EnsQcVAudFlxqROIykje 781:RgqlxOE 327:xRlgkLPFq 700:EfV 405:htTCZU 846:HcbdW 404:vUSZEnWNVQjCf 15:RxqlFAukgpsdcHvVnXWO 758:uAdFqlRpxboe 87:awiNj 595:EQvX 816:iamwWNZI 9:LPhTtCiWcemruFEIDxJ 445:qARluFxdpEkgbVfQsZTh 243:PLhEm 260:xZegNdmrRkB 933:Rxqugk 284:DreJB 208:FlqdGeC 447:PLmEe 925:Hcbde 258:EvQX 915:EvkKfYBnW 900:HcbWdnps 776:d 316:FquAdRlxpE 594:AqxpVsEbglvOWcdThZnP 881:WncsUET 49:MrDJemjp 533:E 245:WncUZbs 477:HcdbWsE 603:EvVfQX 1006:HcbWd 111:FVE 689:htTCZ 679:EVvQsp 681:xRoGkAmCZjOQNVXYe 832:OYXkQgfZemEncPT 827:EVphX 291:C 849:LPEVemhiprTWZ 775:h 872:EvmspZ 798:Rxqglk 221:zyZgk 757:EvVQjfSsOZpcmqIlBCth 562:WncT 43:WcnzThtE 468:cHbWnsEvZQINmewaihGo 616:z 272:RlxqgkAupVbfsQX 106:VEWnfpbvsOUXZjBaeYIi 6:ElRVvQ 469:AquRbpxlHGs 991:lRqxg 981:EQV 568:WcHnUbfEsOVywTZIhPQX 278:derOuHGA 611:xRpVlAgkuEqbYXdvBHZm 101:FuRlqAVj 294:RqlFxuAdgkEpOWHVmeLP 944:LPWmei 650:uAFqlxRdpVHbsoGEv 993:xRlFgkoEqpVsWQfOIZTh 968:EVQfOXw 427:UnWZsHF 1034:hCTtUZpkgbsqAKOQBmSy 149:qRlFuAxdVpWcEzembsgk 377:EvVQfXKj 368:thCwiaI 224:gkpVYOfXQKjZNUWnETCh 782:E 907:WcnZUbsHT 91:lRxBjUZXYuqgkymEepAd 442:TChZn 147:heTtCBDjkfYOrKMQSZyU 523:NIaiwjSmEZyQ 45:pbVuAcfNOEZXUQSvskBg 658:HcbdsWpuVE 1018:HWcbns 990:QSYEjxdlequskCvZTthP";
 var DES_C1 = {"ALA": 19, "BAR": 173, "BIZ": 51, "CAC": 4, "CAN": 1, "CAS": 9, "CUE": 1, "GIR": 27, "GIP": 46, "HUS": 4, "BAL": 32, "RIO": 7, "LLE": 10, "MAD": 424, "NAV": 34, "PAL": 1, "SEG": 8, "SOR": 1, "TAR": 19, "TER": 5, "TOL": 1, "VAL": 7, "ZAR": 28};
 var PLAZAS_P = {"ALM": 20, "CAD": 28, "COR": 15, "GRA": 12, "HUE": 15, "JAE": 11, "MAL": 22, "SEV": 42, "HUS": 15, "TER": 8, "ZAR": 28, "AST": 14, "BAL": 38, "LPA": 20, "TFE": 26, "CAN": 17, "AVI": 13, "BUR": 17, "LEO": 5, "PAL": 11, "SAL": 13, "SEG": 10, "SOR": 7, "VLL": 16, "ZAM": 9, "ALB": 9, "CRE": 13, "CUE": 11, "GUA": 13, "TOL": 18, "BAR": 99, "GIR": 26, "LLE": 21, "TAR": 27, "ALI": 34, "CAS": 19, "VAL": 53, "BAD": 16, "CAC": 16, "ACO": 26, "LUG": 8, "OUR": 1, "PON": 22, "MAD": 228, "MUR": 32, "NAV": 22, "ALA": 15, "BIZ": 31, "GIP": 28, "RIO": 13, "CEU": 11, "MEL": 6};
 var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'fallos 2ª parte', 'orden alfabético desde la U', 'cupo de reserva delante'];
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var EST = new Map(), pool = new Map();
-  (function () { var A = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; EST_T.split(' ').forEach(function (e) { var p = e.split(':'); EST.set(+p[0], p[1].split('').map(function (c) { return EST_C[A.indexOf(c)]; })); }); })();
   var members = new Map(), loaded = false, justAdded = null, filtro = [], vista = 'c', prefFiltro = '', provFiltro = '', provTocado = false, yo = null;
   try { vista = localStorage.getItem('vista') === 'd' ? 'd' : 'c'; } catch (e) {}
   try { var y0 = parseInt(localStorage.getItem('yo'), 10); if (y0 >= 0) yo = y0; } catch (e) {}
@@ -630,7 +625,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   }
   function faltanTxt(k, p) {
     var r = DATA[k], n = 0, ns = 0, sd = p ? PROV_SEDE[p] : '';
-    DATA.forEach(function (x) { if (x.k !== k && !pool.has(x.k) && compare(x, r).c < 0) { n++; if (sd && SEDE.charAt(x.k) === sd) ns++; } });
+    DATA.forEach(function (x) { if (x.k !== k && !members.has(x.k) && compare(x, r).c < 0) { n++; if (sd && SEDE.charAt(x.k) === sd) ns++; } });
     if (!n) return 'Todos los aprobados con más nota que tú ya han elegido destino.';
     var t = 'Faltan ' + n + (n === 1 ? ' aprobado con más nota que tú que no ha elegido destino' : ' aprobados con más nota que tú que no han elegido destino');
     if (sd) t += '; ' + ns + (ns === 1 ? ' se examinó' : ' se examinaron') + ' en ' + SEDE_NOM[sd] + (SEDE_NOM[sd] === PROVS[p] ? '' : ' (sede de ' + PROVS[p] + ')');
@@ -655,7 +650,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
       return j;
     });
   }
-  function infoDe(k) { return members.get(k) || pool.get(k) || { pref: '', prov: 'MUR', alt: false, zona: '', ops: [] }; }
+  function infoDe(k) { return members.get(k) || { pref: '', prov: 'MUR', alt: false, zona: '', ops: [] }; }
   function opsDe(s, prov) {
     var vistas = {}, l = String(s || '').split(',').filter(function (x) { if (!PROVS[x] || vistas[x]) return false; vistas[x] = true; return true; });
     if (!l.length && PROVS[prov]) l = [prov];
@@ -666,7 +661,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function cascada(extra) {
     var res = new Map(), cnt = {}, ult = {};
     Object.keys(PROVS).forEach(function (p) { cnt[p] = 0; });
-    var ks = Array.from(pool.keys()); if (extra && !pool.has(extra.k)) ks.push(extra.k);
+    var ks = Array.from(members.keys()); if (extra && !members.has(extra.k)) ks.push(extra.k);
     ks.map(function (k) { return DATA[k]; }).sort(function (a, b) { return compare(a, b).c; }).forEach(function (r) {
       var ops = (extra && extra.k === r.k) ? extra.ops : infoDe(r.k).ops, d = null, oi = -1;
       for (var i = 0; i < ops.length; i++) { if (cnt[ops[i]] < PLAZAS_P[ops[i]]) { d = ops[i]; oi = i; cnt[d]++; ult[d] = r.T; break; } }
@@ -684,15 +679,14 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function enProv(mm, p) { return (mm.ops || []).indexOf(p) >= 0; }
   function posEn(r, p, mmSup) {
     var n = 1;
-    pool.forEach(function (mm, k) { if (k !== r.k && enProv(mm, p) && compare(DATA[k], r).c < 0) n++; });
+    members.forEach(function (mm, k) { if (k !== r.k && enProv(mm, p) && compare(DATA[k], r).c < 0) n++; });
     return enProv(mmSup || infoDe(r.k), p) ? n : null;
   }
   function setMembers(resp) {
     var codes = Array.isArray(resp) ? resp : ((resp && resp.codigos) || []), prefs = (resp && resp.prefs) || {}, provs = (resp && resp.provs) || {}, alts = (resp && resp.alts) || {};
     var m = new Map();
     codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false, zona: ((resp && resp.zonas) || {})[c] || '', ops: opsDe(((resp && resp.ops) || {})[c], provs[c]) }); });
-    members = m; pool = new Map(m); EST.forEach(function (ops, k) { if (!pool.has(k) && DATA[k]) pool.set(k, { pref: '', prov: ops[0], alt: false, zona: '', ops: ops, est: true }); });
-    loaded = true; CAS = cascada();
+    members = m; loaded = true; CAS = cascada();
     try { if (!resp.__cache) localStorage.setItem('estado', JSON.stringify({ t: Date.now(), r: resp })); } catch (e) {}
     if (!provTocado && yo != null && m.has(yo)) { var ay = CAS.res.get(yo); setProv(ay && ay.d ? ay.d : m.get(yo).prov); }
     $('upd').textContent = 'actualizada a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
@@ -732,7 +726,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     return p;
   }
   function ranked() {
-    return Array.from(pool.keys()).map(function (k) { return DATA[k]; }).sort(function (a, b) { return compare(a, b).c; });
+    return Array.from(members.keys()).map(function (k) { return DATA[k]; }).sort(function (a, b) { return compare(a, b).c; });
   }
   function ensureVisible(node) {
     var r = node.getBoundingClientRect();
@@ -741,7 +735,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function render() {
     var rows = ranked(), list = $('lista');
     list.textContent = '';
-    $('s-n').textContent = String(members.size); $('s-n2').textContent = 'de ' + DATA.length + ' aprobados' + (rows.length > members.size ? ' · +' + (rows.length - members.size) + ' estimados' : '');
+    $('s-n').textContent = String(rows.length); $('s-n2').textContent = 'de ' + DATA.length + ' aprobados';
     var todos = !provFiltro && !prefFiltro;
     if (!ALL) ALL = DATA.slice().sort(function (a, b) { return compare(a, b).c; });
     var lista = todos ? ALL : rows;
@@ -783,10 +777,10 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     lista.forEach(function (r, i) {
       var mm = infoDe(r.k), pr = mm.pref, a = CAS.res.get(r.k) || { d: null, oi: -1, pos: null };
       var aqui = provFiltro ? a.d === provFiltro : !!a.d;
-      var apuntado = pool.has(r.k), estim = apuntado && !members.has(r.k);
+      var apuntado = members.has(r.k);
       var esTop = aqui, otra = (provFiltro && !aqui) || !apuntado;
       var posV = provFiltro ? (aqui ? a.pos : '–') : i + 1;
-      var etq = !apuntado ? 'Sin destino elegido' : (a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza') + (estim ? ' · estimado' : '');
+      var etq = !apuntado ? 'Sin destino elegido' : (a.d ? PROVS[a.d] + (a.oi > 0 ? ' · ' + (a.oi + 1) + 'ª' : '') : 'Sin plaza');
       var nota2 = '';
       if (!apuntado) nota2 = 'Sin destino elegido';
       else if (otra) { var ip = mm.ops.indexOf(provFiltro); nota2 = (a.d && a.oi < ip) ? 'Se va a ' + PROVS[a.d] + ' (' + (a.oi + 1) + 'ª opción)' : (a.d ? 'No entra · va a ' + PROVS[a.d] : 'No entra en sus opciones'); }
