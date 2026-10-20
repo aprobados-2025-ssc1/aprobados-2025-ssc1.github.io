@@ -858,7 +858,8 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     var del = $('c-del'); del.hidden = true; del.disabled = false; del.dataset.ok = ''; del.textContent = 'Borrar mis datos';
     if (members.has(r.k)) {
       var pos = ranked().findIndex(function (x) { return x.k === r.k; }) + 1;
-      $('c-sub').textContent = 'Nota ' + nf.format(r.T) + ' · Ya estás apuntado (puesto ' + pos + ' general). Con tus preferencias entrarías en ' + txtAsig(CAS.res.get(r.k)) + '. Para cambiarlas, escribe los 4 números de tu DNI y pulsa «Guardar preferencias».';
+      var aa = CAS.res.get(r.k);
+      $('c-sub').textContent = 'Nota ' + nf.format(r.T) + ' · Ya estás apuntado (puesto ' + pos + ' general). Con tus preferencias entrarías en ' + txtAsig(aa) + '. ' + faltanTxt(r.k, (aa && aa.d) || selOps[0]) + ' Para cambiarlas, escribe los 4 números de tu DNI y pulsa «Guardar preferencias».';
       go.hidden = true; save.hidden = false; save.disabled = false; save.textContent = 'Guardar preferencias';
       save.onclick = function () {
         if (!selOps.length) { toast('Añade al menos una provincia.', 'err'); return; }
