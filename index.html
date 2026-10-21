@@ -289,6 +289,9 @@ body.intro-on { overflow: hidden; }
 .foot { margin-top: 2rem; display: grid; gap: .5rem; font-size: .8125rem; color: var(--muted); }
 .foot p { margin: 0; max-width: 44rem; }
 .foot .tag { font-weight: 700; color: var(--ink); }
+.foot .personal-access { justify-self: start; padding-block: .4rem; color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+.foot .personal-access:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; border-radius: 2px; }
+
 @keyframes flash { from { background: rgba(149, 193, 31, .35); } to { background: var(--card); } }
 .card.flash { animation: flash 2.4s ease-out; }
 #toastbar {
@@ -527,6 +530,7 @@ body.intro-on { overflow: hidden; }
   <div id="vacio" class="vacio"><b id="v-t">Cargando el listado…</b><span id="v-s"></span></div>
   <footer class="foot">
     <p>Fuente: listado de opositores que han superado la fase de oposición, acceso libre, turno general, del Cuerpo Administrativo de la Administración de la Seguridad Social (informe firmado el 16/10/2026), y listado de opositores del turno de reserva que han superado la nota de corte (informe firmado el 16/10/2026). Las notas aparecen tal como figuran en esos listados; el de reserva no incluye aciertos ni fallos.</p>
+    <a class="personal-access" href="https://script.google.com/macros/s/AKfycbwF7eHPs9haJAsytWLc6FLBS0Op_QqdX7DMINTj6qRzzTHMblA0m7Fihp1LOTqY1rZM/exec" target="_blank" rel="noopener noreferrer" aria-label="Acceso personal al estudio privado (requiere tu cuenta de Google)">Acceso personal</a>
   </footer>
 </main>
 
