@@ -531,6 +531,7 @@ body.intro-on { overflow: hidden; }
   <footer class="foot">
     <p>Fuente: listado de opositores que han superado la fase de oposición, acceso libre, turno general, del Cuerpo Administrativo de la Administración de la Seguridad Social (informe firmado el 16/10/2026), y listado de opositores del turno de reserva que han superado la nota de corte (informe firmado el 16/10/2026). Las notas aparecen tal como figuran en esos listados; el de reserva no incluye aciertos ni fallos.</p>
     <a class="personal-access" href="https://script.google.com/macros/s/AKfycbwF7eHPs9haJAsytWLc6FLBS0Op_QqdX7DMINTj6qRzzTHMblA0m7Fihp1LOTqY1rZM/exec" target="_blank" rel="noopener noreferrer" aria-label="Acceso personal al estudio privado (requiere tu cuenta de Google)">Acceso personal</a>
+    <details><summary>Privacidad y registro de actividad</summary><p>Registramos las visualizaciones, la dirección IP de conexión y los cambios de preferencias para medir el uso y revisar posibles modificaciones indebidas. El registro es privado. Una IP compartida no demuestra que los cambios sean de la misma persona; no se revierten automáticamente. Las visitas contadas son cargas registradas, no personas únicas. Solo se cuentan visitas desde la activación de este registro.</p></details>
   </footer>
 </main>
 
@@ -645,10 +646,14 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     box.hidden = false;
   }
   var API = 'https://script.google.com/macros/s/AKfycbzDZR4HR3Ofpq0ZCcGlYAsd_eVonfMW-FaiA_vMKK5a9H_Dj_CIZRiTYO7UBnazGE4MZw/exec';
+  var REGISTRO_API = 'https://ssc1-registro-privado.vercel.app/api/registro';
+  var sesionRegistro = '';
+  try { sesionRegistro = sessionStorage.getItem('sesion-registro') || crypto.randomUUID(); sessionStorage.setItem('sesion-registro', sesionRegistro); } catch (e) {}
   var GS = true;
   function api(method, body) {
+    if (method === 'POST') body = Object.assign({}, body, { requestId: crypto.randomUUID(), sesion: sesionRegistro });
     var opts = method === 'POST' ? { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'text/plain;charset=utf-8' } } : {};
-    var url = method === 'POST' ? API : API + '?api=listar&t=' + Date.now();
+    var url = method === 'POST' ? REGISTRO_API : API + '?api=listar&t=' + Date.now();
     return fetch(url, opts).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.error) throw new Error(j.error);
       return j;
@@ -1074,6 +1079,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   $('yo-no').addEventListener('click', function () { setYo(null); render(); toast('Listo. Busca tu nombre arriba si quieres que la página te recuerde.'); });
   q.disabled = false;
   render(); load();
+  api('POST', { accion: 'visita' }).catch(function () { /* El registro estadístico no bloquea la consulta. */ });
   setInterval(function () { if (!document.hidden) load(); }, 120000);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
 })();
