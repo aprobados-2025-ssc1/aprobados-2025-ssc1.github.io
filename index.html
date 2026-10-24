@@ -395,6 +395,7 @@ body.intro-on { overflow: hidden; }
       <button id="retry-load" class="cver" type="button" hidden>Reintentar carga</button>
       <div id="conf" class="conf" hidden>
         <div class="conf-who"><b id="c-nm"></b><span id="c-sub"></span></div>
+        <div id="c-fields">
         <div class="prefs" id="c-prefs">
           <span class="pref-l" id="prov-l">Tus provincias por orden de preferencia <small>(puedes añadir todas, en orden)</small></span>
           <ol id="ops-list" class="ops" aria-labelledby="prov-l"></ol>
@@ -435,6 +436,7 @@ body.intro-on { overflow: hidden; }
         <button id="c-save" class="go" type="button" hidden>Guardar destino preferido</button>
         <button id="c-del" class="cdel" type="button" hidden>Borrar mis datos</button>
         <button id="c-x" class="cx" type="button">Elegir otro nombre</button>
+        </div>
       </div>
     </div>
     <dl class="stats">
@@ -697,7 +699,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function setMembers(resp) {
     var codes0 = Array.isArray(resp) ? resp : resp && resp.codigos;
     if (!Array.isArray(codes0) || codes0.some(function (c) { return !/^p\d+$/.test(c) || !DATA[Number(c.slice(1))]; })) throw new Error('La respuesta de inscritos no contiene datos válidos.');
-    var primeraCarga = !loaded;
+    var primeraCarga = !loaded, anterior = curR ? infoDe(curR.k) : null;
     var codes = Array.isArray(resp) ? resp : ((resp && resp.codigos) || []), prefs = (resp && resp.prefs) || {}, provs = (resp && resp.provs) || {}, alts = (resp && resp.alts) || {};
     var m = new Map();
     codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false, zona: ((resp && resp.zonas) || {})[c] || '', ops: opsDe(((resp && resp.ops) || {})[c], provs[c]) }); });
@@ -706,7 +708,15 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     if (!provTocado && yo != null && m.has(yo)) { var ay = CAS.res.get(yo); setProv(ay && ay.d ? ay.d : m.get(yo).prov); }
     $('upd').textContent = (resp.__cache ? 'copia local del ' : 'actualizada a las ') + new Date(resp.__cache || Date.now()).toLocaleString('es-ES', resp.__cache ? { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' } : { hour: '2-digit', minute: '2-digit' });
     render();
-    if (curR && !$('conf').hidden) { if (primeraCarga) choose(curR); else paintPrefs(); }
+    if (curR && !$('conf').hidden) {
+      var borrador = { ops: selOps.slice(), pref: selPref, zona: selZona.slice() };
+      var editado = !primeraCarga && (JSON.stringify(borrador.ops) !== JSON.stringify(anterior.ops) || borrador.pref !== anterior.pref || borrador.zona.join(',') !== anterior.zona);
+      var dni = $('c-dni').value, busqueda = q.value, foco = document.activeElement;
+      choose(curR);
+      if (editado) { selOps = borrador.ops; selPref = borrador.pref; selZona = borrador.zona; paintPrefs(); }
+      $('c-dni').value = dni; q.value = busqueda;
+      if (foco && !foco.hidden) foco.focus({ preventScroll: true });
+    }
   }
   try { var c0 = JSON.parse(localStorage.getItem('estado') || 'null'); if (c0 && c0.r && Date.now() - c0.t < 6 * 3600 * 1000) { c0.r.__cache = c0.t; setTimeout(function () { if (!loaded) { try { setMembers(c0.r); } catch (e) { /* Una copia inválida no sustituye los datos del servidor. */ } } }, 0); } } catch (e) {}
   var cargando = false;
@@ -890,7 +900,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     q.value = ''; res = []; closeSug();
     var conf = $('conf'), go = $('c-go');
     $('c-nm').textContent = r.disp;
-    $('c-prefs').hidden = !loaded;
+    $('c-fields').hidden = !loaded;
     if (!loaded) {
       curR = r; conf.hidden = false;
       $('c-sub').textContent = 'Cargando los inscritos. Tu inscripción y tu puesto se mostrarán al terminar.';
