@@ -391,10 +391,11 @@ body.intro-on { overflow: hidden; }
         <input id="q" class="field" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sug" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Apellidos o nombre">
       </div>
       <ul id="sug" class="sug" role="listbox" aria-label="Coincidencias" hidden></ul>
-      <p id="aviso" class="aviso" hidden></p>
+      <p id="aviso" class="aviso" role="status" hidden></p>
+      <button id="retry-load" class="cver" type="button" hidden>Reintentar carga</button>
       <div id="conf" class="conf" hidden>
         <div class="conf-who"><b id="c-nm"></b><span id="c-sub"></span></div>
-        <div class="prefs">
+        <div class="prefs" id="c-prefs">
           <span class="pref-l" id="prov-l">Tus provincias por orden de preferencia <small>(puedes añadir todas, en orden)</small></span>
           <ol id="ops-list" class="ops" aria-labelledby="prov-l"></ol>
           <p class="seml" id="sem-l" hidden>Semáforo: <span class="sem v"><i></i>con margen</span> <span class="sem a"><i></i>justo en el corte</span> <span class="sem r"><i></i>no entras</span><br>Mira cada provincia por separado, como si fuera tu 1ª opción, con las personas apuntadas hasta ahora.</p>
@@ -680,6 +681,7 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     return { res: res, cnt: cnt, ult: ult };
   }
   function semaforo(k, p) {
+    if (!loaded) return { c: 'a', t: 'Esperando los datos de inscritos' };
     var a = cascada({ k: k, ops: [p] }).res.get(k), np = PLAZAS_P[p];
     if (!a || !a.d) return { c: 'r', t: 'No entras ahora' };
     var txt = ' (puesto ' + a.pos + ' de ' + np + ')';
@@ -693,19 +695,38 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     return enProv(mmSup || infoDe(r.k), p) ? n : null;
   }
   function setMembers(resp) {
+    var codes0 = Array.isArray(resp) ? resp : resp && resp.codigos;
+    if (!Array.isArray(codes0) || codes0.some(function (c) { return !/^p\d+$/.test(c) || !DATA[Number(c.slice(1))]; })) throw new Error('La respuesta de inscritos no contiene datos válidos.');
+    var primeraCarga = !loaded;
     var codes = Array.isArray(resp) ? resp : ((resp && resp.codigos) || []), prefs = (resp && resp.prefs) || {}, provs = (resp && resp.provs) || {}, alts = (resp && resp.alts) || {};
     var m = new Map();
     codes.forEach(function (c) { var k = parseInt(String(c).slice(1), 10); if (DATA[k]) m.set(k, { pref: PREFS[prefs[c]] ? prefs[c] : '', prov: PROVS[provs[c]] ? provs[c] : 'MUR', alt: false, zona: ((resp && resp.zonas) || {})[c] || '', ops: opsDe(((resp && resp.ops) || {})[c], provs[c]) }); });
     members = m; loaded = true; CAS = cascada();
     try { if (!resp.__cache) localStorage.setItem('estado', JSON.stringify({ t: Date.now(), r: resp })); } catch (e) {}
     if (!provTocado && yo != null && m.has(yo)) { var ay = CAS.res.get(yo); setProv(ay && ay.d ? ay.d : m.get(yo).prov); }
-    $('upd').textContent = 'actualizada a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    $('upd').textContent = (resp.__cache ? 'copia local del ' : 'actualizada a las ') + new Date(resp.__cache || Date.now()).toLocaleString('es-ES', resp.__cache ? { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' } : { hour: '2-digit', minute: '2-digit' });
     render();
+    if (curR && !$('conf').hidden) { if (primeraCarga) choose(curR); else paintPrefs(); }
   }
-  try { var c0 = JSON.parse(localStorage.getItem('estado') || 'null'); if (c0 && c0.r && Date.now() - c0.t < 6 * 3600 * 1000) { c0.r.__cache = 1; setTimeout(function () { if (!loaded) setMembers(c0.r); }, 0); } } catch (e) {}
+  try { var c0 = JSON.parse(localStorage.getItem('estado') || 'null'); if (c0 && c0.r && Date.now() - c0.t < 6 * 3600 * 1000) { c0.r.__cache = c0.t; setTimeout(function () { if (!loaded) { try { setMembers(c0.r); } catch (e) { /* Una copia inválida no sustituye los datos del servidor. */ } } }, 0); } } catch (e) {}
+  var cargando = false;
   function load() {
-    api('GET').then(setMembers).catch(function () { $('upd').textContent = 'no se pudo actualizar'; });
+    if (cargando) return;
+    cargando = true; $('retry-load').hidden = true;
+    $('aviso').hidden = false;
+    $('aviso').textContent = loaded ? 'Actualizando los inscritos…' : 'Cargando los inscritos. Los puestos estarán disponibles al terminar.';
+    var timeout;
+    var espera = new Promise(function (_, reject) { timeout = setTimeout(function () { reject(new Error('La carga está tardando demasiado.')); }, 20000); });
+    Promise.race([api('GET'), espera]).then(function (resp) {
+      setMembers(resp); $('aviso').hidden = true;
+    }).catch(function () {
+      $('upd').textContent = 'no se pudo actualizar';
+      $('aviso').textContent = loaded ? 'No se pudo actualizar. Se conserva la última lista cargada; los puestos pueden haber cambiado.' : 'No se han podido cargar los inscritos. No podemos calcular puestos todavía. Pulsa «Reintentar carga».';
+      $('retry-load').hidden = false;
+      if (!loaded && curR && !$('conf').hidden) $('c-sub').textContent = 'Esperando la lista de inscritos. Reintenta la carga para consultar tu inscripción y tu puesto.';
+    }).finally(function () { clearTimeout(timeout); cargando = false; });
   }
+  $('retry-load').addEventListener('click', load);
   var q = $('q'), sug = $('sug'), res = [], act = -1, toks = [];
 
   function el(tag, cls, txt) {
@@ -745,6 +766,13 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
   function render() {
     var rows = ranked(), list = $('lista');
     list.textContent = '';
+    $('cver').disabled = !loaded;
+    if (!loaded) {
+      $('s-n').textContent = '…'; $('yo').hidden = true; $('fcount').hidden = true;
+      $('vacio').hidden = false; $('v-t').textContent = 'Cargando la clasificación…';
+      $('v-s').textContent = 'Los puestos se mostrarán cuando recibamos los datos de inscritos.';
+      return;
+    }
     $('s-n').textContent = String(rows.length); $('s-n2').textContent = 'de ' + DATA.length + ' aprobados';
     var todos = !provFiltro && !prefFiltro;
     if (!ALL) ALL = DATA.slice().sort(function (a, b) { return compare(a, b).c; });
@@ -862,12 +890,18 @@ var LEVELS = ['aciertos 1ª parte', 'fallos 1ª parte', 'aciertos 2ª parte', 'f
     q.value = ''; res = []; closeSug();
     var conf = $('conf'), go = $('c-go');
     $('c-nm').textContent = r.disp;
+    $('c-prefs').hidden = !loaded;
+    if (!loaded) {
+      curR = r; conf.hidden = false;
+      $('c-sub').textContent = 'Cargando los inscritos. Tu inscripción y tu puesto se mostrarán al terminar.';
+      return;
+    }
     $('c-dni').value = '';
     var mm0 = infoDe(r.k); selPref = mm0.pref; selOps = members.has(r.k) ? mm0.ops.slice() : []; selProv = selOps[0] || ''; selAlt = mm0.alt; selZona = (enProv(mm0, 'MAD') && mm0.zona) ? mm0.zona.split(',') : []; curR = r; paintPrefs();
     var save = $('c-save'); save.hidden = true;
     var del = $('c-del'); del.hidden = true; del.disabled = false; del.dataset.ok = ''; del.textContent = 'Borrar mis datos';
     if (members.has(r.k)) {
-      var pos = ranked().findIndex(function (x) { return x.k === r.k; }) + 1;
+      var pos = DATA.filter(function (x) { return compare(x, r).c < 0; }).length + 1;
       var aa = CAS.res.get(r.k);
       $('c-sub').textContent = 'Nota ' + nf.format(r.T) + ' · Ya estás apuntado (puesto ' + pos + ' general). Con tus preferencias entrarías en ' + txtAsig(aa) + '. ' + faltanTxt(r.k, (aa && aa.d) || selOps[0]) + ' Para cambiarlas, escribe los 4 números de tu DNI y pulsa «Guardar preferencias».';
       go.hidden = true; save.hidden = false; save.disabled = false; save.textContent = 'Guardar preferencias';
