@@ -161,8 +161,8 @@ h2 { margin: 0; font: 700 1.5rem/1.2 var(--f-display); }
 .fila.head { padding-block: .55rem; background: var(--soft); font-size: .6875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .fila .fp { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--soft); font: 800 .875rem var(--f-display); }
 .fila.top .fp { background: var(--lime); color: var(--on-lime); }
-.fila .fn { min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fila .fn .badge { margin: 0 0 0 .45rem; vertical-align: middle; }
+.fila .fn { min-width: 0; font-weight: 700; display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .45rem; overflow-wrap: anywhere; }
+.fila .fn .badge { margin: 0; max-width: 100%; white-space: normal; }
 .fila .fv { text-align: right; color: var(--muted); font-size: .875rem; }
 .fila .ft { text-align: right; font: 800 1.0625rem var(--f-display); }
 .fila.head .fv, .fila.head .ft { font: inherit; color: inherit; }
